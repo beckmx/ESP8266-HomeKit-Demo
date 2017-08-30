@@ -168,7 +168,8 @@ make clean
 
 make BOOT=$boot APP=$app SPI_SPEED=$spi_speed SPI_MODE=$spi_mode SPI_SIZE_MAP=$spi_size_map
 
-curl --upload-file ../../bin/eagle.flash.bin https://transfer.sh/esp-demo.bin
+echo "upload curl:"
+echo curl --upload-file ../../bin/eagle.flash.bin https://transfer.sh/esp-demo.bin
 
 date
 ls -l ../../bin/eagle.[if]*
