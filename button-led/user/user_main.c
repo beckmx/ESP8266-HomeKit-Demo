@@ -201,10 +201,10 @@ void user_init(void)
     os_printf("start of user_init @ %d\n",system_get_time()/1000);
     
 //use this block only once to set your favorite access point or put your own selection routine
-/*    wifi_set_opmode(STATION_MODE); 
+    wifi_set_opmode(STATION_MODE); 
     struct station_config *sconfig = (struct station_config *)zalloc(sizeof(struct station_config));
-    sprintf(sconfig->ssid, ""); //don't forget to set this if you use it
-    sprintf(sconfig->password, ""); //don't forget to set this if you use it
+    sprintf(sconfig->ssid, "Unknown"); //don't forget to set this if you use it
+    sprintf(sconfig->password, "daredevilme"); //don't forget to set this if you use it
     wifi_station_set_config(sconfig);
     free(sconfig);
     wifi_station_connect(); /**/
