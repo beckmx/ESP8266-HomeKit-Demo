@@ -200,7 +200,7 @@ void user_init(void)
     wifi_set_opmode(STATION_MODE); 
     struct station_config *sconfig = (struct station_config *)zalloc(sizeof(struct station_config));
     sprintf(sconfig->ssid, "Unknown"); //don't forget to set this if you use it
-    sprintf(sconfig->password, "08112014"); //don't forget to set this if you use it
+    sprintf(sconfig->password, "daredevilme"); //don't forget to set this if you use it
     wifi_station_set_config(sconfig);
     free(sconfig);
     wifi_station_connect(); /**/
