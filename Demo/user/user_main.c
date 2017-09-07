@@ -185,7 +185,25 @@ void    hkc_user_init(char *accname)
 //      os_printf("1.%d=%s\n",iid,out); free(out);
 //  }
 }
-
+void vSampleFunction( void ){
+    F_FILE *pxFile;
+    char c;
+    
+        /* Open a file called afile.bin. */
+        pxFile = f_open( "afile.bin", "r" );
+        if( pxFile != NULL )
+        {
+            os_printf("YES file exists");
+            /*
+             * Access the file here using f_read().
+             */
+    
+            /* Close the file when all accesses are complete. */
+            f_close( pxFile );
+        } else {
+            os_printf("No file exists");
+        }
+    }
 /******************************************************************************
  * FunctionName : user_init
  * Description  : entry of user application, init user function here
@@ -212,25 +230,7 @@ void user_init(void)
     os_printf("end of user_init @ %d\n",system_get_time()/1000);
 }
 
-void vSampleFunction( void ){
-F_FILE *pxFile;
-char c;
 
-    /* Open a file called afile.bin. */
-    pxFile = f_open( "afile.bin", "r" );
-    if( pxFile != NULL )
-    {
-        os_printf("YES file exists");
-        /*
-         * Access the file here using f_read().
-         */
-
-        /* Close the file when all accesses are complete. */
-        f_close( pxFile );
-    } else {
-        os_printf("No file exists");
-    }
-}
 
 /***********************************************************************************
  * FunctionName : user_rf_cal_sector_set forced upon us by espressif since RTOS1.4.2
