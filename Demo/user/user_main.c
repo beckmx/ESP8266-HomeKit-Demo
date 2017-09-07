@@ -64,6 +64,9 @@
 #include <stdlib.h>
 #include "spiffs_test_params.h"
 
+#include "fcntl.h"
+#include "unistd.h"
+
 xQueueHandle identifyQueue;
 
 struct  gpio {
