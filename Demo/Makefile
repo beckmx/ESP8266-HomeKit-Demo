@@ -124,7 +124,7 @@ DDEFINES +=				\
 # Required for each makefile to inherit from the parent
 #
 
-INCLUDES := $(INCLUDES) -I $(PDIR)include
+INCLUDES := $(INCLUDES) -I $(PDIR)include -I $(SDK_PATH)/include/spiffs
 ## freertos added by HacK
 INCLUDES += -I $(SDK_PATH)/include/freertos
 sinclude $(SDK_PATH)/Makefile
