@@ -59,13 +59,14 @@
 #include "hkc.h"
 #include "gpio.h"
 #include "queue.h"
-#include <stdio.h>
-#include <fatfs/ff.h>
 
-#define TEST_FILENAME "/test_loooong_filename.txt"
-#define TEST_CONTENTS "Hello! It's FatFs on esp8266 with ESP Open RTOS!"
-#define READBUF_SIZE 256
-#define DELAY_MS 3000
+#include "esp8266.h"
+
+#include "fcntl.h"
+#include "unistd.h"
+
+#include "spiffs.h"
+#include "esp_spiffs.h"
 
 xQueueHandle identifyQueue;
 
@@ -74,104 +75,95 @@ struct  gpio {
     int iid;
 } gpio2;
 
-static const char contents[] = TEST_CONTENTS;
-
-static const char *results[] = {
-    [FR_OK]                  = "Succeeded",
-    [FR_DISK_ERR]            = "A hard error occurred in the low level disk I/O layer",
-    [FR_INT_ERR]             = "Assertion failed",
-    [FR_NOT_READY]           = "The physical drive cannot work",
-    [FR_NO_FILE]             = "Could not find the file",
-    [FR_NO_PATH]             = "Could not find the path",
-    [FR_INVALID_NAME]        = "The path name format is invalid",
-    [FR_DENIED]              = "Access denied due to prohibited access or directory full",
-    [FR_EXIST]               = "Access denied due to prohibited access",
-    [FR_INVALID_OBJECT]      = "The file/directory object is invalid",
-    [FR_WRITE_PROTECTED]     = "The physical drive is write protected",
-    [FR_INVALID_DRIVE]       = "The logical drive number is invalid",
-    [FR_NOT_ENABLED]         = "The volume has no work area",
-    [FR_NO_FILESYSTEM]       = "There is no valid FAT volume",
-    [FR_MKFS_ABORTED]        = "The f_mkfs() aborted due to any problem",
-    [FR_TIMEOUT]             = "Could not get a grant to access the volume within defined period",
-    [FR_LOCKED]              = "The operation is rejected according to the file sharing policy",
-    [FR_NOT_ENOUGH_CORE]     = "LFN working buffer could not be allocated",
-    [FR_TOO_MANY_OPEN_FILES] = "Number of open files > _FS_LOCK",
-    [FR_INVALID_PARAMETER]   = "Given parameter is invalid"
-};
-static char readbuf[READBUF_SIZE];
-
-static bool failed(FRESULT res)
+static void example_read_file_posix()
 {
-    bool fail = res != FR_OK;
-    if (fail)
-        os_printf("\n  Error: ");
-        
-    os_printf("\n  %s\n", results[res]);
-    return fail;
+    const int buf_size = 0xFF;
+    uint8_t buf[buf_size];
+
+    int fd = open("test.txt", O_RDONLY);
+    if (fd < 0) {
+        os_printf("Error opening file\n");
+        return;
+    }
+
+    int read_bytes = read(fd, buf, buf_size);
+    os_printf("Read %d bytes\n", read_bytes);
+
+    buf[read_bytes] = '\0';    // zero terminate string
+    os_printf("Data: %s\n", buf);
+
+    close(fd);
 }
 
-void check_fatfs()
+static void example_read_file_spiffs()
 {
-    const char *vol = f_gpio_to_volume(CS_GPIO_PIN);
+    const int buf_size = 0xFF;
+    uint8_t buf[buf_size];
 
-    os_printf("\nCreating test file\n----------------------------\n");
-
-    FATFS fs;
-    // Mount filesystem
-    os_printf("f_mount(&fs, \"%s\")", vol);
-    if (failed(f_mount(&fs, vol, 1)))
+    spiffs_file fd = SPIFFS_open(&fs, "other.txt", SPIFFS_RDONLY, 0);
+    if (fd < 0) {
+        os_printf("Error opening file\n");
         return;
+    }
 
-    // Set default drive
-    os_printf("f_chdrive(\"%s\")", vol);
-    if (failed(f_chdrive(vol)))
+    int read_bytes = SPIFFS_read(&fs, fd, buf, buf_size);
+    os_printf("Read %d bytes\n", read_bytes);
+
+    buf[read_bytes] = '\0';    // zero terminate string
+    os_printf("Data: %s\n", buf);
+
+    SPIFFS_close(&fs, fd);
+}
+
+static void example_write_file()
+{
+    uint8_t buf[] = "Example data, written by ESP8266";
+
+    int fd = open("other.txt", O_WRONLY|O_CREAT, 0);
+    if (fd < 0) {
+        os_printf("Error opening file\n");
         return;
+    }
 
-    FIL f;
-    // Create test file
-    os_printf("f_open(&f, \"%s\", FA_WRITE | FA_CREATE_ALWAYS)", TEST_FILENAME);
-    if (failed(f_open(&f, TEST_FILENAME, FA_WRITE | FA_CREATE_ALWAYS)))
-        return;
+    int written = write(fd, buf, sizeof(buf));
+    os_printf("Written %d bytes\n", written);
 
-    size_t written;
-    // Write test string
-    os_printf("f_write(&f, \"%s\")", contents);
-    if (failed(f_write(&f, contents, sizeof(contents) - 1, &written)))
-        return;
-    os_printf("  Bytes written: %d\n", written);
+    close(fd);
+}
 
-    // Close file
-    os_printf("f_close(&f)");
-    if (failed(f_close(&f)))
-        return;
+static void example_fs_info()
+{
+    uint32_t total, used;
+    SPIFFS_info(&fs, &total, &used);
+    os_printf("Total: %d bytes, used: %d bytes", total, used);
+}
 
-    os_printf("\nReading test file\n----------------------------\n");
+void test_task(void *pvParameters)
+{
+#if SPIFFS_SINGLETON == 1
+    esp_spiffs_init();
+#else
+    // for run-time configuration when SPIFFS_SINGLETON = 0
+    esp_spiffs_init(0x200000, 0x10000);
+#endif
 
-    // Open test file
-    os_printf("f_open(&f, \"%s\", FA_READ)", TEST_FILENAME);
-    if (failed(f_open(&f, TEST_FILENAME, FA_READ)))
-        return;
+    if (esp_spiffs_mount() != SPIFFS_OK) {
+        os_printf("Error mount SPIFFS\n");
+    }
 
-    os_printf("  File size: %u\n", (uint32_t)f_size(&f));
+    while (1) {
+        vTaskDelay(2000 / portTICK_PERIOD_MS);
 
-    size_t readed;
-    // Read file
-    os_printf("f_read(&f, ...)");
-    if (failed(f_read(&f, readbuf, sizeof(readbuf) - 1, &readed)))
-        return;
-    readbuf[readed] = 0;
+        example_write_file();
 
-    os_printf("  Readed %u bytes, test file contents: %s\n", readed, readbuf);
+        example_read_file_posix();
 
-    // Close file
-    os_printf("f_close(&f)");
-    if (failed(f_close(&f)))
-        return;
+        example_read_file_spiffs();
 
-    // Unmount
-    os_printf("f_mount(NULL, \"%s\")", vol);
-    if (failed(f_mount(NULL, vol, 0)))
-        return;
+        example_fs_info();
+
+        printf("\n\n");
+    }
 }
 
 void    led_task(void *arg) //make transfer of gpio via arg, starting as a static variable in led routine
@@ -315,8 +307,7 @@ void user_init(void)
     //try to only do the bare minimum here and do the rest in hkc_user_init
     // if not you could easily run out of stack space during pairing-setup
     //hkc_init("HomeACcessory");
-    check_fatfs();
-    printf("\n\n");
+    xTaskCreate(test_task, "test_task", 1024, NULL, 2, NULL);
     
     os_printf("end of user_init @ %d\n",system_get_time()/1000);
 }
