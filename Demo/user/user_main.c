@@ -60,8 +60,6 @@
 #include "gpio.h"
 #include "queue.h"
 
-#include "esp8266.h"
-
 #include "fcntl.h"
 #include "unistd.h"
 
