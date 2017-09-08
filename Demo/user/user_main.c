@@ -94,97 +94,6 @@ void    led_task(void *arg) //make transfer of gpio via arg, starting as a stati
 
 
 
-static void example_read_file_posix()
-{
-    const int buf_size = 0xFF;
-    uint8_t buf[buf_size];
-
-    int fd = open("test.txt", O_RDONLY);
-    if (fd < 0) {
-        printf("Error opening file\n");
-        return;
-    }
-
-    int read_bytes = read(fd, buf, buf_size);
-    printf("Read %d bytes\n", read_bytes);
-
-    buf[read_bytes] = '\0';    // zero terminate string
-    printf("Data: %s\n", buf);
-
-    close(fd);
-}
-
-static void example_read_file_spiffs()
-{
-    const int buf_size = 0xFF;
-    uint8_t buf[buf_size];
-
-    spiffs_file fd = SPIFFS_open(fs, "other.txt", SPIFFS_RDONLY, 0);
-    if (fd < 0) {
-        printf("Error opening file\n");
-        return;
-    }
-
-    int read_bytes = SPIFFS_read(fs, fd, buf, buf_size);
-    printf("Read %d bytes\n", read_bytes);
-
-    buf[read_bytes] = '\0';    // zero terminate string
-    printf("Data: %s\n", buf);
-
-    SPIFFS_close(fs, fd);
-}
-
-static void example_write_file()
-{
-    uint8_t buf[] = "Example data, written by ESP8266";
-
-    int fd = open("other.txt", O_WRONLY|O_CREAT, 0);
-    if (fd < 0) {
-        printf("Error opening file\n");
-        return;
-    }
-
-    int written = write(fd, buf, sizeof(buf));
-    printf("Written %d bytes\n", written);
-
-    close(fd);
-}
-
-static void example_fs_info()
-{
-    uint32_t total, used;
-    SPIFFS_info(fs, &total, &used);
-    printf("Total: %d bytes, used: %d bytes", total, used);
-}
-
-void test_task(void *pvParameters)
-{
-#if SPIFFS_SINGLETON == 1
-    esp_spiffs_init();
-#else
-    // for run-time configuration when SPIFFS_SINGLETON = 0
-    esp_spiffs_init(0x200000, 0x10000);
-#endif
-
-    if (esp_spiffs_mount() != SPIFFS_OK) {
-        printf("Error mount SPIFFS\n");
-    }
-
-    while (1) {
-        vTaskDelay(2000 / portTICK_PERIOD_MS);
-
-        example_write_file();
-
-        example_read_file_posix();
-
-        example_read_file_spiffs();
-
-        example_fs_info();
-
-        printf("\n\n");
-    }
-}
-
 
 void led(int aid, int iid, cJSON *value, int mode)
 {
@@ -305,6 +214,72 @@ void vSampleFunction( void ){
             os_printf("No file exists");
         }
     }
+
+    enum {
+        CMD_SPIFFS,
+        CMD_END,
+    };
+    
+    #define SSC_CMD_N   (CMD_END + 1)
+    
+    
+    
+    void spiffs_test_help(void)
+    {
+        printf("\nhelp:\n");
+        printf("$ fs \n");
+    }
+    
+    void spiffs_fs1_init(void)
+    {
+        struct esp_spiffs_config config;
+    
+        config.phys_size = FS1_FLASH_SIZE;
+        config.phys_addr = FS1_FLASH_ADDR;
+        config.phys_erase_block = SECTOR_SIZE;
+        config.log_block_size = LOG_BLOCK;
+        config.log_page_size = LOG_PAGE;
+        config.fd_buf_size = FD_BUF_SIZE * 2;
+        config.cache_buf_size = CACHE_BUF_SIZE;
+    
+        esp_spiffs_init(&config);
+    }
+    uint32 user_rf_cal_sector_set(void)
+    {
+        flash_size_map size_map = system_get_flash_size_map();
+        uint32 rf_cal_sec = 0;
+    
+        switch (size_map) {
+            case FLASH_SIZE_4M_MAP_256_256:
+                rf_cal_sec = 128 - 5;
+                break;
+    
+            case FLASH_SIZE_8M_MAP_512_512:
+                rf_cal_sec = 256 - 5;
+                break;
+    
+            case FLASH_SIZE_16M_MAP_512_512:
+            case FLASH_SIZE_16M_MAP_1024_1024:
+                rf_cal_sec = 512 - 5;
+                break;
+    
+            case FLASH_SIZE_32M_MAP_512_512:
+            case FLASH_SIZE_32M_MAP_1024_1024:
+                rf_cal_sec = 1024 - 5;
+                break;
+            case FLASH_SIZE_64M_MAP_1024_1024:
+                rf_cal_sec = 2048 - 5;
+                break;
+            case FLASH_SIZE_128M_MAP_1024_1024:
+                rf_cal_sec = 4096 - 5;
+                break;
+            default:
+                rf_cal_sec = 0;
+                break;
+        }
+    
+        return rf_cal_sec;
+    }
 /******************************************************************************
  * FunctionName : user_init
  * Description  : entry of user application, init user function here
@@ -327,7 +302,7 @@ void user_init(void)
     //try to only do the bare minimum here and do the rest in hkc_user_init
     // if not you could easily run out of stack space during pairing-setup
     //hkc_init("HomeACcessory");
-    xTaskCreate(test_task, "test_task", 1024, NULL, 2, NULL);
+    spiffs_fs1_init();
     os_printf("end of user_init @ %d\n",system_get_time()/1000);
 }
 
