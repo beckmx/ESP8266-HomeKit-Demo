@@ -119,19 +119,19 @@ static void example_read_file_spiffs()
     const int buf_size = 0xFF;
     uint8_t buf[buf_size];
 
-    spiffs_file fd = SPIFFS_open(&fs, "other.txt", SPIFFS_RDONLY, 0);
+    spiffs_file fd = SPIFFS_open(fs, "other.txt", SPIFFS_RDONLY, 0);
     if (fd < 0) {
         printf("Error opening file\n");
         return;
     }
 
-    int read_bytes = SPIFFS_read(&fs, fd, buf, buf_size);
+    int read_bytes = SPIFFS_read(fs, fd, buf, buf_size);
     printf("Read %d bytes\n", read_bytes);
 
     buf[read_bytes] = '\0';    // zero terminate string
     printf("Data: %s\n", buf);
 
-    SPIFFS_close(&fs, fd);
+    SPIFFS_close(fs, fd);
 }
 
 static void example_write_file()
@@ -153,7 +153,7 @@ static void example_write_file()
 static void example_fs_info()
 {
     uint32_t total, used;
-    SPIFFS_info(&fs, &total, &used);
+    SPIFFS_info(fs, &total, &used);
     printf("Total: %d bytes, used: %d bytes", total, used);
 }
 
