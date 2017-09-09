@@ -61,6 +61,7 @@
 #include "queue.h"
 #include "FreeRTOS.h"
 #include "esp_spiffs.h"
+#include "task.h"
 
 #include "spiffs.h"
 #include <stdlib.h>
