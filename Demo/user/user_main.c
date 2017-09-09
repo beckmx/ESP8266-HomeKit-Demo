@@ -77,7 +77,7 @@
 
 
 xQueueHandle identifyQueue;
-spiffs &fd;
+spiffs fs;
 
 struct  gpio {
     int aid;
