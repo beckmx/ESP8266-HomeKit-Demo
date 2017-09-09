@@ -59,7 +59,6 @@
 #include "hkc.h"
 #include "gpio.h"
 #include "queue.h"
-#include "header_file.h"
 #include "FreeRTOS.h"
 #include "esp_spiffs.h"
 
