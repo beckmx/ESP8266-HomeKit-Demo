@@ -213,15 +213,15 @@ static void example_read_file_posix()
 
     int fd = open("test.txt", O_RDONLY);
     if (fd < 0) {
-        printf("Error opening file\n");
+        os_printf("Error opening file\n");
         return;
     }
 
     int read_bytes = read(fd, buf, buf_size);
-    printf("Read %d bytes\n", read_bytes);
+    os_printf("Read %d bytes\n", read_bytes);
 
     buf[read_bytes] = '\0';    // zero terminate string
-    printf("Data: %s\n", buf);
+    os_printf("Data: %s\n", buf);
 
     close(fd);
 }
@@ -233,15 +233,15 @@ static void example_read_file_spiffs()
 
     spiffs_file fd = SPIFFS_open(&fs, "other.txt", SPIFFS_RDONLY, 0);
     if (fd < 0) {
-        printf("Error opening file\n");
+        os_printf("Error opening file\n");
         return;
     }
 
     int read_bytes = SPIFFS_read(&fs, fd, buf, buf_size);
-    printf("Read %d bytes\n", read_bytes);
+    os_printf("Read %d bytes\n", read_bytes);
 
     buf[read_bytes] = '\0';    // zero terminate string
-    printf("Data: %s\n", buf);
+    os_printf("Data: %s\n", buf);
 
     SPIFFS_close(&fs, fd);
 }
@@ -252,12 +252,12 @@ static void example_write_file()
 
     int fd = open("other.txt", O_WRONLY|O_CREAT, 0);
     if (fd < 0) {
-        printf("Error opening file\n");
+        os_printf("Error opening file\n");
         return;
     }
 
     int written = write(fd, buf, sizeof(buf));
-    printf("Written %d bytes\n", written);
+    os_printf("Written %d bytes\n", written);
 
     close(fd);
 }
@@ -266,7 +266,7 @@ static void example_fs_info()
 {
     uint32_t total, used;
     SPIFFS_info(&fs, &total, &used);
-    printf("Total: %d bytes, used: %d bytes", total, used);
+    os_printf("Total: %d bytes, used: %d bytes", total, used);
 }
 
 void test_task(void *pvParameters)
@@ -284,7 +284,7 @@ void test_task(void *pvParameters)
         esp_spiffs_init(&config);
 
     if (esp_spiffs_mount() != SPIFFS_OK) {
-        printf("Error mount SPIFFS\n");
+        os_printf("Error mount SPIFFS\n");
     }
 
     while (1) {
@@ -298,7 +298,7 @@ void test_task(void *pvParameters)
 
         example_fs_info();
 
-        printf("\n\n");
+        os_printf("\n\n");
     }
 }
 /******************************************************************************
