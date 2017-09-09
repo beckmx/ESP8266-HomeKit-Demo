@@ -270,12 +270,17 @@ static void example_fs_info()
 
 void test_task(void *pvParameters)
 {
-#if SPIFFS_SINGLETON == 1
-    esp_spiffs_init();
-#else
-    // for run-time configuration when SPIFFS_SINGLETON = 0
-    esp_spiffs_init(0x200000, 0x10000);
-#endif
+    struct esp_spiffs_config config;
+    
+        config.phys_size = FS1_FLASH_SIZE;
+        config.phys_addr = FS1_FLASH_ADDR;
+        config.phys_erase_block = SECTOR_SIZE;
+        config.log_block_size = LOG_BLOCK;
+        config.log_page_size = LOG_PAGE;
+        config.fd_buf_size = FD_BUF_SIZE * 2;
+        config.cache_buf_size = CACHE_BUF_SIZE;
+    
+        esp_spiffs_init(&config);
 
     if (esp_spiffs_mount() != SPIFFS_OK) {
         printf("Error mount SPIFFS\n");
