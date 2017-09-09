@@ -60,6 +60,8 @@
 #include "gpio.h"
 #include "queue.h"
 #include "header_file.h"
+#include "FreeRTOS.h"
+#include "esp_spiffs.h"
 
 #include "spiffs.h"
 #include <stdlib.h>
@@ -203,91 +205,7 @@ void    hkc_user_init(char *accname)
 //      os_printf("1.%d=%s\n",iid,out); free(out);
 //  }
 }
-void vSampleFunction( void ){
-    F_FILE *pxFile;
-    char c;
-    
-        /* Open a file called afile.bin. */
-        pxFile = f_open( "afile.bin", "r" );
-        if( pxFile != NULL )
-        {
-            os_printf("YES file exists");
-            /*
-             * Access the file here using f_read().
-             */
-    
-            /* Close the file when all accesses are complete. */
-            f_close( pxFile );
-        } else {
-            os_printf("No file exists");
-        }
-    }
 
-    enum {
-        CMD_SPIFFS,
-        CMD_END,
-    };
-    
-    #define SSC_CMD_N   (CMD_END + 1)
-    
-    
-    
-    void spiffs_test_help(void)
-    {
-        printf("\nhelp:\n");
-        printf("$ fs \n");
-    }
-    
-    void spiffs_fs1_init(void)
-    {
-        struct esp_spiffs_config config;
-    
-        config.phys_size = FS1_FLASH_SIZE;
-        config.phys_addr = FS1_FLASH_ADDR;
-        config.phys_erase_block = SECTOR_SIZE;
-        config.log_block_size = LOG_BLOCK;
-        config.log_page_size = LOG_PAGE;
-        config.fd_buf_size = FD_BUF_SIZE * 2;
-        config.cache_buf_size = CACHE_BUF_SIZE;
-    
-        esp_spiffs_init(&config);
-    }
-    uint32 user_rf_cal_sector_set(void)
-    {
-        flash_size_map size_map = system_get_flash_size_map();
-        uint32 rf_cal_sec = 0;
-    
-        switch (size_map) {
-            case FLASH_SIZE_4M_MAP_256_256:
-                rf_cal_sec = 128 - 5;
-                break;
-    
-            case FLASH_SIZE_8M_MAP_512_512:
-                rf_cal_sec = 256 - 5;
-                break;
-    
-            case FLASH_SIZE_16M_MAP_512_512:
-            case FLASH_SIZE_16M_MAP_1024_1024:
-                rf_cal_sec = 512 - 5;
-                break;
-    
-            case FLASH_SIZE_32M_MAP_512_512:
-            case FLASH_SIZE_32M_MAP_1024_1024:
-                rf_cal_sec = 1024 - 5;
-                break;
-            case FLASH_SIZE_64M_MAP_1024_1024:
-                rf_cal_sec = 2048 - 5;
-                break;
-            case FLASH_SIZE_128M_MAP_1024_1024:
-                rf_cal_sec = 4096 - 5;
-                break;
-            default:
-                rf_cal_sec = 0;
-                break;
-        }
-    
-        return rf_cal_sec;
-    }
 /******************************************************************************
  * FunctionName : user_init
  * Description  : entry of user application, init user function here
@@ -310,7 +228,7 @@ void user_init(void)
     //try to only do the bare minimum here and do the rest in hkc_user_init
     // if not you could easily run out of stack space during pairing-setup
     //hkc_init("HomeACcessory");
-    spiffs_fs1_init();
+    
     os_printf("end of user_init @ %d\n",system_get_time()/1000);
 }
 
