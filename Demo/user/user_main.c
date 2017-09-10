@@ -79,6 +79,7 @@
 
 xQueueHandle identifyQueue;
 spiffs fs;
+struct esp_spiffs_config config;
 
 struct  gpio {
     int aid;
@@ -132,6 +133,30 @@ void led(int aid, int iid, cJSON *value, int mode)
             //print an error?
         }break;
     }
+}
+
+int32_t esp_spiffs_mount()
+{
+    printf("SPIFFS memory, work_buf_size=%d, fds_buf_size=%d, cache_buf_size=%d\n",
+            work_buf.size, fds_buf.size, cache_buf.size);
+
+    // int32_t err = SPIFFS_mount(&fs, &config, (uint8_t*)work_buf.buf,
+    //         (uint8_t*)fds_buf.buf, fds_buf.size,
+    //         cache_buf.buf, cache_buf.size, 0);
+
+    //fs_mount_specific(1280*1024, 256*1024, 4096, 4096, 128);
+    u8_t _work[LOG_PAGE * 2];
+    u8_t _fds[FD_BUF_SIZE * 2];
+    u8_t _cache[CACHE_BUF_SIZE];
+    
+    // static int check_valid_flash = 1;
+    int32_t err = SPIFFS_mount(&fs, &config, _work, _fds, sizeof(_fds), _cache, sizeof(_cache), 0);
+
+    if (err != SPIFFS_OK) {
+        printf("Error spiffs mount: %d\n", err);
+    }
+
+    return err;
 }
 
 void identify_task(void *arg)
@@ -271,7 +296,7 @@ static void example_fs_info()
 
 void test_task(void *pvParameters)
 {
-    struct esp_spiffs_config config;
+    
     
         config.phys_size = FS1_FLASH_SIZE;
         config.phys_addr = FS1_FLASH_ADDR;
