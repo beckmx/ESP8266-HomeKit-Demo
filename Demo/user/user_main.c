@@ -241,7 +241,7 @@ static void example_read_file_spiffs()
         return;
     }
 
-    _ssize_t read_bytes = read(&fs, fd, buf, buf_size);
+    _ssize_t read_bytes = read(&fs, fd, &buf, buf_size);
     os_printf("Read %d bytes\n", read_bytes);
 
     buf[read_bytes] = '\0';    // zero terminate string
