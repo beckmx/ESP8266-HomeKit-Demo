@@ -253,7 +253,7 @@ static void example_read_file_spiffs()
     buf[read_bytes] = '\0';    // zero terminate string
     os_printf("Data: %s\n", buf);
 
-    close(&fs, fd);
+    close(fd);
 }
 
 static void example_write_file()
