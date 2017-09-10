@@ -79,7 +79,7 @@
 
 xQueueHandle identifyQueue;
 spiffs fs;
-struct spiffs_config config;
+struct esp_spiffs_config config;
 
 struct  gpio {
     int aid;
@@ -135,30 +135,7 @@ void led(int aid, int iid, cJSON *value, int mode)
     }
 }
 
-int32_t esp_spiffs_mount()
-{
-    
 
-    // int32_t err = SPIFFS_mount(&fs, &config, (uint8_t*)work_buf.buf,
-    //         (uint8_t*)fds_buf.buf, fds_buf.size,
-    //         cache_buf.buf, cache_buf.size, 0);
-
-    //fs_mount_specific(1280*1024, 256*1024, 4096, 4096, 128);
-    u8_t _work[LOG_PAGE * 2];
-    u8_t _fds[FD_BUF_SIZE * 2];
-    u8_t _cache[CACHE_BUF_SIZE];
-
-    
-    
-    // static int check_valid_flash = 1;
-    int32_t err = SPIFFS_mount(&fs, &config, _work, _fds, sizeof(_fds), _cache, sizeof(_cache), 0);
-
-    if (err != SPIFFS_OK) {
-        printf("Error spiffs mount: %d\n", err);
-    }
-
-    return err;
-}
 
 void identify_task(void *arg)
 {
@@ -307,9 +284,9 @@ void test_task(void *pvParameters)
         config.fd_buf_size = FD_BUF_SIZE * 2;
         config.cache_buf_size = CACHE_BUF_SIZE;
     
-        esp_spiffs_init(&config);
+        int32_t err esp_spiffs_init(&config);
 
-    if (esp_spiffs_mount() != SPIFFS_OK) {
+    if (err != SPIFFS_OK) {
         os_printf("Error mount SPIFFS\n");
     }
 
