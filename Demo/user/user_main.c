@@ -240,8 +240,14 @@ static void example_read_file_spiffs()
         os_printf("Error opening spiffs\n");
         return;
     }
-
-    _ssize_t read_bytes = read(&fs, fd, &buf, buf_size);
+    int read_bytes;
+    if (fd < 3) {
+        read_bytes = -1;
+        os_printf("Error read bytes\n");
+    } else {
+        read_bytes = SPIFFS_read(&fs, fd - 3, &buf, buf_size);
+    }
+    // _ssize_t read_bytes = read(&fs, fd, &buf, buf_size);
     os_printf("Read %d bytes\n", read_bytes);
 
     buf[read_bytes] = '\0';    // zero terminate string
