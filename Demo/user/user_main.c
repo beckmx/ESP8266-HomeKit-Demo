@@ -137,8 +137,7 @@ void led(int aid, int iid, cJSON *value, int mode)
 
 int32_t esp_spiffs_mount()
 {
-    printf("SPIFFS memory, work_buf_size=%d, fds_buf_size=%d, cache_buf_size=%d\n",
-            work_buf.size, fds_buf.size, cache_buf.size);
+    
 
     // int32_t err = SPIFFS_mount(&fs, &config, (uint8_t*)work_buf.buf,
     //         (uint8_t*)fds_buf.buf, fds_buf.size,
@@ -148,6 +147,8 @@ int32_t esp_spiffs_mount()
     u8_t _work[LOG_PAGE * 2];
     u8_t _fds[FD_BUF_SIZE * 2];
     u8_t _cache[CACHE_BUF_SIZE];
+
+    
     
     // static int check_valid_flash = 1;
     int32_t err = SPIFFS_mount(&fs, &config, _work, _fds, sizeof(_fds), _cache, sizeof(_cache), 0);
