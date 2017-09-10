@@ -241,13 +241,13 @@ static void example_read_file_spiffs()
         return;
     }
 
-    int read_bytes = SPIFFS_read(&fs, fd, buf, buf_size);
+    int read_bytes = read(&fs, fd, buf, buf_size);
     os_printf("Read %d bytes\n", read_bytes);
 
     buf[read_bytes] = '\0';    // zero terminate string
     os_printf("Data: %s\n", buf);
 
-    SPIFFS_close(&fs, fd);
+    close(&fs, fd);
 }
 
 static void example_write_file()
