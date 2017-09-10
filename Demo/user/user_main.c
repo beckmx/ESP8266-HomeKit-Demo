@@ -234,9 +234,10 @@ static void example_read_file_spiffs()
     const int buf_size = 0xFF;
     uint8_t buf[buf_size];
 
-    spiffs_file fd = SPIFFS_open(&fs, "other.txt", SPIFFS_RDONLY, 0);
+    //spiffs_file fd = SPIFFS_open(&fs, "other.txt", SPIFFS_RDONLY, 0);
+    int fd = open("other.txt", O_RDONLY, 0);
     if (fd < 0) {
-        os_printf("Error opening file\n");
+        os_printf("Error opening spiffs\n");
         return;
     }
 
@@ -256,10 +257,10 @@ static void example_write_file()
     int fd = open("other.txt", O_WRONLY|O_CREAT, 0);
     //spiffs_file fdSPIFFS_open(&fs, "my_file", SPIFFS_CREAT | SPIFFS_TRUNC | SPIFFS_RDWR, 0);
     if (fd < 0) {
-        os_printf("Error opening file\n");
+        os_printf("Error write file\n");
         return;
     } else {
-        os_printf("File opened!\n");
+        os_printf("File writen!\n");
     }
 
     int written = write(fd, buf, sizeof(buf));
@@ -298,7 +299,7 @@ void test_task(void *pvParameters)
 
         example_write_file();
 
-        example_read_file_posix();
+        // example_read_file_posix();
 
         example_read_file_spiffs();
 
