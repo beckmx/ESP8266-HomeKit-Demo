@@ -253,11 +253,13 @@ static void example_write_file()
 {
     uint8_t buf[] = "Example data, written by ESP8266";
 
-    //int fd = open("other.txt", O_WRONLY|O_CREAT, 0);
-    spiffs_file fd =SPIFFS_open(&fs, "other.txt", SPIFFS_CREAT | SPIFFS_TRUNC | SPIFFS_RDWR, 0);
+    int fd = open("other.txt", O_WRONLY|O_CREAT, 0);
+    //spiffs_file fdSPIFFS_open(&fs, "my_file", SPIFFS_CREAT | SPIFFS_TRUNC | SPIFFS_RDWR, 0);
     if (fd < 0) {
         os_printf("Error opening file\n");
         return;
+    } else {
+        os_printf("File opened!\n");
     }
 
     int written = write(fd, buf, sizeof(buf));
