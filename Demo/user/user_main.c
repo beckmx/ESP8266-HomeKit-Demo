@@ -259,7 +259,7 @@ static void example_write_file()
 static void example_fs_info()
 {
     uint32_t total, used;
-    SPIFFS_info(&workingFS, &total, &used);
+    SPIFFS_info(workingFS, &total, &used);
     os_printf("Total: %d bytes, used: %d bytes", total, used);
 }
 
