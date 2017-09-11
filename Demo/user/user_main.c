@@ -231,48 +231,28 @@ static void example_read_file_posix()
 
 static void example_read_file_spiffs()
 {
-    const int buf_size = 0xFF;
-    uint8_t buf[buf_size];
-
-    //spiffs_file fd = SPIFFS_open(&fs, "other.txt", SPIFFS_RDONLY, 0);
-    int fd = open("other.txt", O_RDONLY, 0);
-    if (fd < 0) {
-        os_printf("Error opening spiffs\n");
-        return;
-    }
-    int read_bytes;
-    if (fd < 3) {
-        read_bytes = -1;
-        os_printf("Error read bytes\n");
-    } else {
-        read_bytes = SPIFFS_read(&fs, fd - 3, &buf, buf_size);
-    }
-    // _ssize_t read_bytes = read(&fs, fd, &buf, buf_size);
-    os_printf("Read %d bytes\n", read_bytes);
-
-    buf[read_bytes] = '\0';    // zero terminate string
-    os_printf("Data: %s\n", buf);
-
-    close(fd);
+    char out[20] = {0};
+    int pfd = open("myfile",O_RDWR);
+    if (read(pfd, out, 20) < 0)
+         printf("read errno \n");
+    close(pfd);
+    printf("--> %s <--\n", out);
 }
 
 static void example_write_file()
 {
-    uint8_t buf[] = "Example data, written by ESP8266";
-
-    int fd = open("other.txt", O_WRONLY|O_CREAT, 0);
-    //spiffs_file fdSPIFFS_open(&fs, "my_file", SPIFFS_CREAT | SPIFFS_TRUNC | SPIFFS_RDWR, 0);
-    if (fd < 0) {
-        os_printf("Error write file\n");
-        return;
-    } else {
-        os_printf("File writen!\n");
+    char *buf="hello world";
+    char out[20] = {0};
+    int pfd = open("myfile", O_TRUNC | O_CREAT | O_RDWR, S_IRUSR | S_IWUSR);
+    if(pfd <= 3) {
+       printf("open file error \n");
     }
-
-    int written = write(fd, buf, sizeof(buf));
-    os_printf("Written %d bytes\n", written);
-
-    close(fd);
+    int write_byte = write(pfd, buf, strlen(buf));
+    if (write_byte <= 0)
+    {
+       printf("write file error \n");
+    }
+    close(pfd);
 }
 
 static void example_fs_info()
@@ -353,8 +333,8 @@ void user_init(void)
     //try to only do the bare minimum here and do the rest in hkc_user_init
     // if not you could easily run out of stack space during pairing-setup
     //hkc_init("HomeACcessory");
-    //xTaskCreate(test_task, "test_task", 1024, NULL, 2, NULL);
-    flash_test();
+    xTaskCreate(test_task, "test_task", 1024, NULL, 2, NULL);
+    //flash_test();
     os_printf("end of user_init @ %d\n",system_get_time()/1000);
 }
 
