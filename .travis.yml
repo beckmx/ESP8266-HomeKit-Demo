@@ -42,7 +42,7 @@ script:
   # Don't verbose-build all examples (too much output), only verbose-build errors
   # - ( ${MAKE_CMD} ) || ( ${MAKE_CMD} V=1 )
   - git clone https://github.com/beckmx/ESP8266_RTOS_SDK.git
-  # - cd ESP8266_RTOS_SDK
+  - cd ESP8266_RTOS_SDK
   # - git reset --hard ae29bf8
   - echo 'Modifying ESP8266_RTOS_SDK Memory Map'
   - cd ld
