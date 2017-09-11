@@ -314,6 +314,23 @@ void test_task(void *pvParameters)
         os_printf("\n\n");
     }
 }
+
+static void ICACHE_FLASH_ATTR test() {
+    os_printf("SDK version:%s\n", system_get_sdk_version());
+ 
+     uint32 temp[4]={122323, 13, 14, 15};
+     uint32 temp1[4]={0};
+ 
+     int i = spi_flash_erase_sector(0x8c);
+     os_printf("spi_flash_erase_sector: %d\n", i);
+     int o = spi_flash_write(0x8c000, temp, sizeof(temp));
+     os_printf("spi_flash_write: %d\n", o);
+ 
+     int p = spi_flash_read(0x8c000, temp1, sizeof(temp1));
+     os_printf("spi_flash_read: %d\n", p);
+ 
+     os_printf("read :%x, %x, %x, %x\n", temp1[0], temp1[1], temp1[2], temp1[3]);
+ }
 /******************************************************************************
  * FunctionName : user_init
  * Description  : entry of user application, init user function here
@@ -339,6 +356,7 @@ void user_init(void)
     xTaskCreate(test_task, "test_task", 1024, NULL, 2, NULL);
     os_printf("end of user_init @ %d\n",system_get_time()/1000);
 }
+
 
 
 
