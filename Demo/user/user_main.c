@@ -78,7 +78,7 @@
 
 
 xQueueHandle identifyQueue;
-
+extern spiffs *workingFS;
 struct esp_spiffs_config config;
 
 struct  gpio {
@@ -259,8 +259,7 @@ static void example_write_file()
 static void example_fs_info()
 {
     uint32_t total, used;
-    spiffs &csf = esp_spiffs_current();
-    SPIFFS_info(csf, &total, &used);
+    SPIFFS_info(&workingFS, &total, &used);
     os_printf("Total: %d bytes, used: %d bytes", total, used);
 }
 
