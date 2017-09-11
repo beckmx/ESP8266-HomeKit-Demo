@@ -275,9 +275,7 @@ void test_task(void *pvParameters)
         config.fd_buf_size = FD_BUF_SIZE * 2;
         config.cache_buf_size = CACHE_BUF_SIZE;
     
-        
-    fs=esp_spiffs_init(&config);
-    if ( fs != SPIFFS_OK) {
+    if ( esp_spiffs_init(&config) != SPIFFS_OK) {
         os_printf("Error mount SPIFFS\n");
     }
 
