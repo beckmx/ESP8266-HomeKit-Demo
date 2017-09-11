@@ -231,6 +231,7 @@ static void example_read_file_posix()
 
 static void example_read_file_spiffs()
 {
+    
     char out[20] = {0};
     int pfd = open("myfile",O_RDWR);
     if (read(pfd, out, 20) < 0)
@@ -275,8 +276,8 @@ void test_task(void *pvParameters)
         config.cache_buf_size = CACHE_BUF_SIZE;
     
         
-
-    if (esp_spiffs_init(&config) != SPIFFS_OK) {
+    fs=esp_spiffs_init(&config);
+    if ( fs != SPIFFS_OK) {
         os_printf("Error mount SPIFFS\n");
     }
 
