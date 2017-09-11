@@ -78,7 +78,7 @@
 
 
 xQueueHandle identifyQueue;
-spiffs fs;
+extern spiffs fs;
 struct esp_spiffs_config config;
 
 struct  gpio {
