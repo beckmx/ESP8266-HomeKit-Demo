@@ -75,7 +75,7 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
-
+#include <lwip/api.h>
 
 #include "espconn.h"
 
@@ -300,81 +300,38 @@ void test_task(void *pvParameters)
     }
 }
 
-void wifi_handle_event_cb(System_Event_t *evt)
+void httpd_task(void *pvParameters)
 {
-    printf("event %x\n", evt->event_id);
-
-    switch (evt->event_id) {
-        case EVENT_STAMODE_CONNECTED:
-            printf("connect to ssid %s, channel %d\n", evt->event_info.connected.ssid,
-                    evt->event_info.connected.channel);
-            break;
-        case EVENT_STAMODE_DISCONNECTED:
-            printf("disconnect from ssid %s, reason %d\n", evt->event_info.disconnected.ssid,
-                    evt->event_info.disconnected.reason);
-            break;
-        case EVENT_STAMODE_AUTHMODE_CHANGE:
-            printf("mode: %d -> %d\n", evt->event_info.auth_change.old_mode, evt->event_info.auth_change.new_mode);
-            break;
-        case EVENT_STAMODE_GOT_IP:
-            printf("ip:" IPSTR ",mask:" IPSTR ",gw:" IPSTR, IP2STR(&evt->event_info.got_ip.ip),
-                    IP2STR(&evt->event_info.got_ip.mask), IP2STR(&evt->event_info.got_ip.gw));
-            printf("\n");
-            break;
-        case EVENT_SOFTAPMODE_STACONNECTED:
-            printf("station: " MACSTR "join, AID = %d\n", MAC2STR(evt->event_info.sta_connected.mac),
-                    evt->event_info.sta_connected.aid);
-            break;
-        case EVENT_SOFTAPMODE_STADISCONNECTED:
-            printf("station: " MACSTR "leave, AID = %d\n", MAC2STR(evt->event_info.sta_disconnected.mac),
-                    evt->event_info.sta_disconnected.aid);
-            break;
-        default:
-            break;
+    struct netconn *client = NULL;
+    struct netconn *nc = netconn_new(NETCONN_TCP);
+    if (nc == NULL) {
+        printf("Failed to allocate socket\n");
+        vTaskDelete(NULL);
     }
-} 
-
-void conn_ap_init(void)
-{
-	wifi_set_opmode(STATIONAP_MODE);
-	struct station_config config;
-	memset(&config,0,sizeof(config));  //set value of config from address of &config to width of size to be value '0'
-	sprintf(config.ssid, DEMO_AP_SSID);
-	sprintf(config.password, DEMO_AP_PASSWORD);
-	wifi_station_set_config(&config);         
-	wifi_set_event_handler_cb(wifi_handle_event_cb);
-	wifi_station_connect();
-}
-
-void soft_ap_init(void)
-{
-    wifi_set_opmode(SOFTAP_MODE);
-    struct softap_config *config = (struct softap_config *) zalloc(sizeof(struct softap_config)); // initialization
-    wifi_softap_get_config(config); // Get soft-AP config first.
-    sprintf(config->ssid, SOFT_AP_SSID);
-    sprintf(config->password, SOFT_AP_PASSWORD);
-    config->authmode = AUTH_WPA_WPA2_PSK;
-    config->ssid_len = 0; // or its actual SSID length
-    config->max_connection = 4;
-    wifi_softap_set_config(config); // Set ESP8266 soft-AP config
-    free(config);
-    struct station_info * station = wifi_softap_get_station_info();
-    while (station) {
-        printf("bssid : MACSTR, ip : IPSTR/n", MAC2STR(station->bssid), IP2STR(&station->ip));
-        station = STAILQ_NEXT(station, next);
+    netconn_bind(nc, IP_ADDR_ANY, 80);
+    netconn_listen(nc);
+    char buf[512];
+    while (1) {
+        err_t err = netconn_accept(nc, &client);
+        if (err == ERR_OK) {
+            struct netbuf *nb;
+            if ((err = netconn_recv(client, &nb)) == ERR_OK) {
+                void *data;
+                u16_t len;
+                netbuf_data(nb, &data, &len);
+                printf("Received data:\n%.*s\n", len, (char*) data);
+                snprintf(buf, sizeof(buf),
+                        "HTTP/1.1 200 OK\r\n"
+                        "Content-type: text/html\r\n\r\n"
+                        "Test");
+                netconn_write(client, buf, strlen(buf), NETCONN_COPY);
+            }
+            netbuf_delete(nb);
+        }
+        printf("Closing connection\n");
+        netconn_close(client);
+        netconn_delete(client);
     }
-    wifi_softap_free_station_info(); // Free it by calling functionss
-    wifi_softap_dhcps_stop(); // disable soft-AP DHCP server
-    struct ip_info info;
-    IP4_ADDR(&info.ip, 192, 168, 5, 1); // set IP
-    IP4_ADDR(&info.gw, 192, 168, 5, 1); // set gateway
-    IP4_ADDR(&info.netmask, 255, 255, 255, 0); // set netmask
-    wifi_set_ip_info(SOFTAP_IF, &info);
-    struct dhcps_lease dhcp_lease;
-    IP4_ADDR(&dhcp_lease.start_ip, 192, 168, 5, 100);
-    IP4_ADDR(&dhcp_lease.end_ip, 192, 168, 5, 105);
-    wifi_softap_set_dhcps_lease(&dhcp_lease);
-    wifi_softap_dhcps_start(); // enable soft-AP DHCP server
 }
 
 /******************************************************************************
@@ -401,7 +358,7 @@ void user_init(void)
     //hkc_init("HomeACcessory");
     //xTaskCreate(test_task, "test_task", 1024, NULL, 2, NULL);
     //flash_test();
-    
+    xTaskCreate(&httpd_task, "http_server", 1024, NULL, 2, NULL);
     os_printf("end of user_init @ %d\n",system_get_time()/1000);
 }
 
