@@ -81,9 +81,9 @@
 
 
 #define DEMO_AP_SSID      "WT_TEST"
-#define DEMO_AP_PASSWORD  "demo"
+#define DEMO_AP_PASSWORD  "demodemo"
 #define SOFT_AP_SSID      "DEMO_AP"
-#define SOFT_AP_PASSWORD  "demo"
+#define SOFT_AP_PASSWORD  "demodemo"
 
 
 xQueueHandle identifyQueue;
