@@ -79,6 +79,7 @@
 
 #include "espconn.h"
 
+
 #define DEMO_AP_SSID      "WT_TEST"
 #define DEMO_AP_PASSWORD  "1234567abc"
 #define SOFT_AP_SSID      "DEMO_AP"
@@ -265,30 +266,7 @@ static void example_write_file()
     close(pfd);
 }
 
-void httpd_task(void *pvParameters)
-{
-    tCGI pCGIs[] = {
-        {"/gpio", (tCGIHandler) gpio_cgi_handler},
-        {"/about", (tCGIHandler) about_cgi_handler},
-        {"/websockets", (tCGIHandler) websocket_cgi_handler},
-    };
 
-    const char *pcConfigSSITags[] = {
-        "uptime", // SSI_UPTIME
-        "heap",   // SSI_FREE_HEAP
-        "led"     // SSI_LED_STATE
-    };
-
-    /* register handlers and start the server */
-    http_set_cgi_handlers(pCGIs, sizeof (pCGIs) / sizeof (pCGIs[0]));
-    http_set_ssi_handler((tSSIHandler) ssi_handler, pcConfigSSITags,
-            sizeof (pcConfigSSITags) / sizeof (pcConfigSSITags[0]));
-    websocket_register_callbacks((tWsOpenHandler) websocket_open_cb,
-            (tWsHandler) websocket_cb);
-    httpd_init();
-
-    for (;;);
-}
 
 
 void test_task(void *pvParameters)
