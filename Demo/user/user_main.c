@@ -311,6 +311,27 @@ void httpd_task(void *pvParameters)
     netconn_bind(nc, IP_ADDR_ANY, 80);
     netconn_listen(nc);
     char buf[512];
+    const char *webpage = {
+        "HTTP/1.1 200 OK\r\n"
+        "Content-type: text/html\r\n\r\n"
+        "<html><head><title>HTTP Server</title>"
+        "<style> div.main {"
+        "font-family: Arial;"
+        "padding: 0.01em 16px;"
+        "box-shadow: 2px 2px 1px 1px #d2d2d2;"
+        "background-color: #f1f1f1;}"
+        "</style></head>"
+        "<body><div class='main'>"
+        "<h3>HTTP Server</h3>"
+        "<p>URL: %s</p>"
+        "<p>Uptime: %d seconds</p>"
+        "<p>Free heap: %d bytes</p>"
+        "<button onclick=\"location.href='/on'\" type='button'>"
+        "LED On</button></p>"
+        "<button onclick=\"location.href='/off'\" type='button'>"
+        "LED Off</button></p>"
+        "</div></body></html>"
+    };
     while (1) {
         err_t err = netconn_accept(nc, &client);
         if (err == ERR_OK) {
@@ -319,16 +340,34 @@ void httpd_task(void *pvParameters)
                 void *data;
                 u16_t len;
                 netbuf_data(nb, &data, &len);
-                os_printf("Received data:\n%.*s\n", len, (char*) data);
-                snprintf(buf, sizeof(buf),
-                        "HTTP/1.1 200 OK\r\n"
-                        "Content-type: text/html\r\n\r\n"
-                        "Test");
-                netconn_write(client, buf, strlen(buf), NETCONN_COPY);
+                /* check for a GET request */
+                if (!strncmp(data, "GET ", 4)) {
+                    char uri[16];
+                    const int max_uri_len = 16;
+                    char *sp1, *sp2;
+                    /* extract URI */
+                    sp1 = data + 4;
+                    sp2 = memchr(sp1, ' ', max_uri_len);
+                    int len = sp2 - sp1;
+                    memcpy(uri, sp1, len);
+                    uri[len] = '\0';
+                    os_printf("uri: %s\n", uri);
+                    if (!strncmp(uri, "/on", max_uri_len))
+                        // gpio_write(2, false);
+                        os_printf("should turn ON led");
+                    else if (!strncmp(uri, "/off", max_uri_len))
+                        //gpio_write(2, true);
+                        os_printf("should turn OFF led");
+                    snprintf(buf, sizeof(buf), webpage,
+                            uri,
+                            xTaskGetTickCount() * portTICK_PERIOD_MS / 1000,
+                            (int) xPortGetFreeHeapSize());
+                    netconn_write(client, buf, strlen(buf), NETCONN_COPY);
+                }
             }
             netbuf_delete(nb);
         }
-        os_printf("Closing connection\n");
+        printf("Closing connection\n");
         netconn_close(client);
         netconn_delete(client);
     }
