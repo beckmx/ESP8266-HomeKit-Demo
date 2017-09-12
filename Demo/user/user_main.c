@@ -311,10 +311,22 @@ void httpd_task(void *pvParameters)
     netconn_bind(nc, IP_ADDR_ANY, 80);
     netconn_listen(nc);
     char buf[512];
+    const char *saveOk={
+        "HTTP/1.1 200 OK\r\n"
+    }
     const char *webpage = {
         "HTTP/1.1 200 OK\r\n"
         "Content-type: text/html\r\n\r\n"
         "<html><head><title>HTTP Server</title>"
+        "<script>function proceed () {"
+        "var form = document.createElement('form');"
+        "form.setAttribute('method', 'POST');"
+        "form.setAttribute('action', '/savewifi');"
+        "form.style.display = 'hidden';"
+        "document.body.appendChild(form)"
+        "form.submit();"
+        "}"
+        "</script>"
         "<style> div.main {"
         "font-family: Arial;"
         "padding: 0.01em 16px;"
@@ -326,7 +338,7 @@ void httpd_task(void *pvParameters)
         "<p>URL: %s</p>"
         "<p>Uptime: %d seconds</p>"
         "<p>Free heap: %d bytes</p>"
-        "<button onclick=\"location.href='/on'\" type='button'>"
+        "<button onclick=\"proceed();\" type='button'>"
         "LED On</button></p>"
         "<button onclick=\"location.href='/off'\" type='button'>"
         "LED Off</button></p>"
@@ -359,6 +371,29 @@ void httpd_task(void *pvParameters)
                         //gpio_write(2, true);
                         os_printf("should turn OFF led");
                     snprintf(buf, sizeof(buf), webpage,
+                            uri,
+                            xTaskGetTickCount() * portTICK_RATE_MS / 1000,
+                            (int) xPortGetFreeHeapSize());
+                    netconn_write(client, buf, strlen(buf), NETCONN_COPY);
+                }
+                if (!strncmp(data, "POST ", 4)) {
+                    char uri[16];
+                    const int max_uri_len = 16;
+                    char *sp1, *sp2;
+                    /* extract URI */
+                    sp1 = (char*)data + 4;
+                    sp2 = memchr(sp1, ' ', max_uri_len);
+                    int len = sp2 - sp1;
+                    memcpy(uri, sp1, len);
+                    uri[len] = '\0';
+                    os_printf("uri: %s\n", uri);
+                    // if (!strncmp(uri, "/on", max_uri_len))
+                    //     // gpio_write(2, false);
+                    //     os_printf("should turn ON led");
+                    // else if (!strncmp(uri, "/off", max_uri_len))
+                    //     //gpio_write(2, true);
+                    //     os_printf("should turn OFF led");
+                    snprintf(buf, sizeof(buf), saveOk,
                             uri,
                             xTaskGetTickCount() * portTICK_RATE_MS / 1000,
                             (int) xPortGetFreeHeapSize());
