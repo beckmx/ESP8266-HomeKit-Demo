@@ -342,7 +342,11 @@ void httpd_task(void *pvParameters)
         "LED On</button></p>"
         "<button onclick=\"location.href='/off'\" type='button'>"
         "LED Off</button></p>"
-        "</div></body></html>"
+        "<form id=\"ninja\" action=\"/savewifi\" method=\"POST\">"
+        "<input id=\"donaldduck\" type=\"hidden\" name=\"q\" value=\"a\">"
+        "<button type=\"submit\">Save WIFI settings</button>"
+        "</form>"
+        "</div>""</body></html>"
     };
     while (1) {
         err_t err = netconn_accept(nc, &client);
@@ -393,7 +397,7 @@ void httpd_task(void *pvParameters)
                     // else if (!strncmp(uri, "/off", max_uri_len))
                     //     //gpio_write(2, true);
                     //     os_printf("should turn OFF led");
-                    snprintf(buf, sizeof(buf), saveOk,
+                    snprintf(buf, sizeof(buf), webpage,
                             uri,
                             xTaskGetTickCount() * portTICK_RATE_MS / 1000,
                             (int) xPortGetFreeHeapSize());
