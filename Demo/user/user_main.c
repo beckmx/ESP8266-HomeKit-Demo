@@ -346,7 +346,7 @@ void httpd_task(void *pvParameters)
                     const int max_uri_len = 16;
                     char *sp1, *sp2;
                     /* extract URI */
-                    sp1 = data + 4;
+                    sp1 = (char*)data + 4;
                     sp2 = memchr(sp1, ' ', max_uri_len);
                     int len = sp2 - sp1;
                     memcpy(uri, sp1, len);
@@ -360,7 +360,7 @@ void httpd_task(void *pvParameters)
                         os_printf("should turn OFF led");
                     snprintf(buf, sizeof(buf), webpage,
                             uri,
-                            xTaskGetTickCount() * portTICK_PERIOD_MS / 1000,
+                            xTaskGetTickCount() * portTICK_RATE_MS / 1000,
                             (int) xPortGetFreeHeapSize());
                     netconn_write(client, buf, strlen(buf), NETCONN_COPY);
                 }
