@@ -424,7 +424,7 @@ void user_init(void)
     //hkc_init("HomeACcessory");
     //xTaskCreate(test_task, "test_task", 1024, NULL, 2, NULL);
     //flash_test();
-    soft_ap_init();
+    
     os_printf("end of user_init @ %d\n",system_get_time()/1000);
 }
 
