@@ -305,7 +305,7 @@ void httpd_task(void *pvParameters)
     struct netconn *client = NULL;
     struct netconn *nc = netconn_new(NETCONN_TCP);
     if (nc == NULL) {
-        printf("Failed to allocate socket\n");
+        os_printf("Failed to allocate socket\n");
         vTaskDelete(NULL);
     }
     netconn_bind(nc, IP_ADDR_ANY, 80);
@@ -319,7 +319,7 @@ void httpd_task(void *pvParameters)
                 void *data;
                 u16_t len;
                 netbuf_data(nb, &data, &len);
-                printf("Received data:\n%.*s\n", len, (char*) data);
+                os_printf("Received data:\n%.*s\n", len, (char*) data);
                 snprintf(buf, sizeof(buf),
                         "HTTP/1.1 200 OK\r\n"
                         "Content-type: text/html\r\n\r\n"
@@ -328,7 +328,7 @@ void httpd_task(void *pvParameters)
             }
             netbuf_delete(nb);
         }
-        printf("Closing connection\n");
+        os_printf("Closing connection\n");
         netconn_close(client);
         netconn_delete(client);
     }
