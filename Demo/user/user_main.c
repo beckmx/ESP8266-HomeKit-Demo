@@ -78,7 +78,6 @@
 
 
 #include "espconn.h"
-#include "soft_ap.h"
 
 #define DEMO_AP_SSID      "WT_TEST"
 #define DEMO_AP_PASSWORD  "1234567abc"
