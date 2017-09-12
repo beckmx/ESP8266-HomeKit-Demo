@@ -313,7 +313,7 @@ void httpd_task(void *pvParameters)
     char buf[512];
     const char *saveOk={
         "HTTP/1.1 200 OK\r\n"
-    }
+    };
     const char *webpage = {
         "HTTP/1.1 200 OK\r\n"
         "Content-type: text/html\r\n\r\n"
