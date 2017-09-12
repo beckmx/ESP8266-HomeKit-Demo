@@ -81,9 +81,9 @@
 
 
 #define DEMO_AP_SSID      "WT_TEST"
-#define DEMO_AP_PASSWORD  "1234567abc"
+#define DEMO_AP_PASSWORD  "demo"
 #define SOFT_AP_SSID      "DEMO_AP"
-#define SOFT_AP_PASSWORD  "12345678"
+#define SOFT_AP_PASSWORD  "demo"
 
 
 xQueueHandle identifyQueue;
@@ -334,6 +334,37 @@ void httpd_task(void *pvParameters)
     }
 }
 
+void soft_ap_init(void)
+{
+    wifi_set_opmode(SOFTAP_MODE);
+    struct softap_config *config = (struct softap_config *) zalloc(sizeof(struct softap_config)); // initialization
+    wifi_softap_get_config(config); // Get soft-AP config first.
+    sprintf(config->ssid, SOFT_AP_SSID);
+    sprintf(config->password, SOFT_AP_PASSWORD);
+    config->authmode = AUTH_WPA_WPA2_PSK;
+    config->ssid_len = 0; // or its actual SSID length
+    config->max_connection = 4;
+    wifi_softap_set_config(config); // Set ESP8266 soft-AP config
+    free(config);
+    struct station_info * station = wifi_softap_get_station_info();
+    while (station) {
+        os_printf("bssid : MACSTR, ip : IPSTR/n", MAC2STR(station->bssid), IP2STR(&station->ip));
+        station = STAILQ_NEXT(station, next);
+    }
+    wifi_softap_free_station_info(); // Free it by calling functionss
+    wifi_softap_dhcps_stop(); // disable soft-AP DHCP server
+    struct ip_info info;
+    IP4_ADDR(&info.ip, 192, 168, 5, 1); // set IP
+    IP4_ADDR(&info.gw, 192, 168, 5, 1); // set gateway
+    IP4_ADDR(&info.netmask, 255, 255, 255, 0); // set netmask
+    wifi_set_ip_info(SOFTAP_IF, &info);
+    struct dhcps_lease dhcp_lease;
+    IP4_ADDR(&dhcp_lease.start_ip, 192, 168, 5, 100);
+    IP4_ADDR(&dhcp_lease.end_ip, 192, 168, 5, 105);
+    wifi_softap_set_dhcps_lease(&dhcp_lease);
+    wifi_softap_dhcps_start(); // enable soft-AP DHCP server
+}
+
 /******************************************************************************
  * FunctionName : user_init
  * Description  : entry of user application, init user function here
@@ -352,6 +383,7 @@ void user_init(void)
     wifi_station_set_config(sconfig);
     free(sconfig);
     wifi_station_connect(); /**/
+    soft_ap_init();
     
     //try to only do the bare minimum here and do the rest in hkc_user_init
     // if not you could easily run out of stack space during pairing-setup
