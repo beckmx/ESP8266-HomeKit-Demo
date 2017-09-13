@@ -323,7 +323,7 @@ void httpd_task(void *pvParameters)
         "form.setAttribute('method', 'POST');"
         "form.setAttribute('action', '/savewifi');"
         "form.style.display = 'hidden';"
-        "document.body.appendChild(form)"
+        "document.body.appendChild(form);"
         "form.submit();"
         "}"
         "</script>"
@@ -346,7 +346,7 @@ void httpd_task(void *pvParameters)
         "<input id=\"donaldduck\" type=\"hidden\" name=\"q\" value=\"a\">"
         "<button type=\"submit\">Save WIFI settings</button>"
         "</form>"
-        "</div>""</body></html>"
+        "</div></body></html>"
     };
     while (1) {
         err_t err = netconn_accept(nc, &client);
