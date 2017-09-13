@@ -317,7 +317,7 @@ void saveToFile(char *content, char *fileName){
 
 char getParamValue(char *paramName, char *queryString){
     char *token;
-    char paramValue;
+    char *paramValue;
     /* get the first token */
     token = strtok(queryString, "&");
     while( token != NULL ) 
@@ -325,10 +325,10 @@ char getParamValue(char *paramName, char *queryString){
        printf( " %s\n", token );
        if (strstr(token, paramName) != NULL) {
         // contains
-        paramValue=(char)token + strlen(paramName)+1;
+        paramValue=(char*)token + strlen(paramName)+1;
         }
     }
-    return paramValue;
+    return (char)paramValue;
 }
 
 void httpd_task(void *pvParameters)
