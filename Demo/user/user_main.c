@@ -388,6 +388,10 @@ void httpd_task(void *pvParameters)
                     // int len = sp2 - sp1;
                     // memcpy(uri, sp1, len);
                     // uri[len] = '\0';
+                    char *array[14];
+                    int i=0;
+                    
+                    array[i] = strtok(sp1,"\r\r");
                     os_printf("uri_post: %s\n", sp1);
                     // if (!strncmp(uri, "/on", max_uri_len))
                     //     // gpio_write(2, false);
