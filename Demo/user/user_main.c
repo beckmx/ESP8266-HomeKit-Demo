@@ -319,12 +319,10 @@ void httpd_task(void *pvParameters)
         "Content-type: text/html\r\n\r\n"
         "<html><head><title>HTTP Server</title>"
         "<script type=\"text/javascript\">function proceed () {"
-        "var form = document.createElement('form');"
-        "form.setAttribute('method', 'POST');"
-        "form.setAttribute('action', '/savewifi');"
-        "form.style.display = 'hidden';"
-        "document.body.appendChild(form);"
-        "form.submit();"
+        "var xhttp = new XMLHttpRequest();"
+        "xhttp.open(\"POST\", \"savewifi\", true);"
+        "xhttp.setRequestHeader(\"Content-type\", \"application/x-www-form-urlencoded\");"
+        "xhttp.send(\"fname=Henry&lname=Ford\");"
         "}"
         "</script>"
         "<style> div.main {"
@@ -343,7 +341,7 @@ void httpd_task(void *pvParameters)
         "<button onclick=\"location.href='/off'\" type='button'>"
         "LED Off</button></p>"
         "<form id=\"ninja\" action=\"/savewifi\" method=\"POST\">"
-        "<input id=\"donaldduck\" type=\"hidden\" name=\"q\" value=\"a\">"
+        "<input id=\"donaldduck\" name=\"ssid\" value=\"a\">"
         "<button type=\"submit\">Save WIFI settings</button>"
         "</form>"
         "</div></body></html>"
@@ -390,7 +388,7 @@ void httpd_task(void *pvParameters)
                     int len = sp2 - sp1;
                     memcpy(uri, sp1, len);
                     uri[len] = '\0';
-                    os_printf("uri: %s\n", uri);
+                    os_printf("uri_post: %s\n", uri);
                     // if (!strncmp(uri, "/on", max_uri_len))
                     //     // gpio_write(2, false);
                     //     os_printf("should turn ON led");
