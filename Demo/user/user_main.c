@@ -396,7 +396,7 @@ void httpd_task(void *pvParameters)
                         array[i++] = p;
                         p = strtok (NULL, "\r");
                     }
-                    for (i = 0; i < 15; i++) {
+                    for (i = 12; i < 15; i++) {
                         os_printf("%s\n", array[i]);
                     }   
                     os_printf("uri_post: %s\n", sp1);
