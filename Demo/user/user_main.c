@@ -416,13 +416,13 @@ void httpd_task(void *pvParameters)
                     char *sp1, *sp2;
                     /* extract URI */
                     sp1 = (char*)data + 4;
-                    char *p = strtok (data, "\r\r");
+                    char *p = strtok (data, "\r\n");
                     char *array[14];
                     int i = 0;
                     while (p != NULL)
                     {
                         array[i++] = p;
-                        p = strtok (NULL, "\r\r");
+                        p = strtok (NULL, "\r\n");
                         os_printf("uri_post--: %s", p);
                     }
                     os_printf("uri_post12: %s", array[12]);
