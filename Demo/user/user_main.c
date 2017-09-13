@@ -380,29 +380,29 @@ void httpd_task(void *pvParameters)
                             (int) xPortGetFreeHeapSize());
                     netconn_write(client, buf, strlen(buf), NETCONN_COPY);
                 }
-                // if (!strncmp(data, "POST ", 4)) {
-                //     char uri[16];
-                //     const int max_uri_len = 16;
-                //     char *sp1, *sp2;
-                //     /* extract URI */
-                //     sp1 = (char*)data + 4;
-                //     sp2 = memchr(sp1, ' ', max_uri_len);
-                //     int len = sp2 - sp1;
-                //     memcpy(uri, sp1, len);
-                //     uri[len] = '\0';
-                //     os_printf("uri: %s\n", uri);
-                //     // if (!strncmp(uri, "/on", max_uri_len))
-                //     //     // gpio_write(2, false);
-                //     //     os_printf("should turn ON led");
-                //     // else if (!strncmp(uri, "/off", max_uri_len))
-                //     //     //gpio_write(2, true);
-                //     //     os_printf("should turn OFF led");
-                //     snprintf(buf, sizeof(buf), webpage,
-                //             uri,
-                //             xTaskGetTickCount() * portTICK_RATE_MS / 1000,
-                //             (int) xPortGetFreeHeapSize());
-                //     netconn_write(client, buf, strlen(buf), NETCONN_COPY);
-                // }
+                if (!strncmp(data, "POST ", 4)) {
+                    char uri[16];
+                    const int max_uri_len = 16;
+                    char *sp1, *sp2;
+                    /* extract URI */
+                    sp1 = (char*)data + 4;
+                    sp2 = memchr(sp1, ' ', max_uri_len);
+                    int len = sp2 - sp1;
+                    memcpy(uri, sp1, len);
+                    uri[len] = '\0';
+                    os_printf("uri: %s\n", uri);
+                    // if (!strncmp(uri, "/on", max_uri_len))
+                    //     // gpio_write(2, false);
+                    //     os_printf("should turn ON led");
+                    // else if (!strncmp(uri, "/off", max_uri_len))
+                    //     //gpio_write(2, true);
+                    //     os_printf("should turn OFF led");
+                    snprintf(buf, sizeof(buf), webpage,
+                            uri,
+                            xTaskGetTickCount() * portTICK_RATE_MS / 1000,
+                            (int) xPortGetFreeHeapSize());
+                    netconn_write(client, buf, strlen(buf), NETCONN_COPY);
+                }
             }
             netbuf_delete(nb);
         }
