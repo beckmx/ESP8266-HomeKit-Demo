@@ -318,7 +318,7 @@ void httpd_task(void *pvParameters)
         "HTTP/1.1 200 OK\r\n"
         "Content-type: text/html\r\n\r\n"
         "<html><head><title>HTTP Server</title>"
-        "<script>function proceed () {"
+        "<script type=\"text/javascript\">function proceed () {"
         "var form = document.createElement('form');"
         "form.setAttribute('method', 'POST');"
         "form.setAttribute('action', '/savewifi');"
