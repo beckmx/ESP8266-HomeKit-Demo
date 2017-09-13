@@ -315,7 +315,7 @@ void saveToFile(char *content, char *fileName){
     close(pfd);
 }
 
-char getParamValue(char *paramName, char *queryString){
+char* getParamValue(char *paramName, char *queryString){
     char *token;
     char *paramValue;
     /* get the first token */
@@ -328,7 +328,7 @@ char getParamValue(char *paramName, char *queryString){
         paramValue=(char*)token + strlen(paramName)+1;
         }
     }
-    return (char)paramValue;
+    return paramValue;
 }
 
 void httpd_task(void *pvParameters)
