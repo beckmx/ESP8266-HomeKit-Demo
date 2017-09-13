@@ -396,9 +396,9 @@ void httpd_task(void *pvParameters)
                         array[i++] = p;
                         p = strtok (NULL, "\r");
                     }
-                    for (i = 0; i < 16; ++i) 
+                    for (i = 0; i < 16; ++i) {
                         os_printf("line->%s\n", array[i]);
-                    
+                    }   
                     os_printf("uri_post: %s\n", sp1);
                     // if (!strncmp(uri, "/on", max_uri_len))
                     //     // gpio_write(2, false);
