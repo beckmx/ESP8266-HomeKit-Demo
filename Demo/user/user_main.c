@@ -384,7 +384,7 @@ void httpd_task(void *pvParameters)
                     char *sp1, *sp2;
                     /* extract URI */
                     sp1 = (char*)data + 2048;
-                    char ch = "fname";
+                    char ch = {"fname"};
                     sp2 = memchr(sp1, ch, max_uri_len);
                     int len = sp2 - sp1;
                     memcpy(uri, sp1, len);
