@@ -315,6 +315,24 @@ void saveToFile(char *content, char *fileName){
     close(pfd);
 }
 
+char getParamValue(char *paramName, char *queryString){
+    char *token;
+    char *paramValue;
+    /* get the first token */
+    token = strtok(queryString, "&");
+    while( token != NULL ) 
+    {
+       printf( " %s\n", token );
+       if (strstr(token, paramName) != NULL) {
+        // contains
+        paramValue=(char*)token + strlen(paramName)+1;
+        }
+     
+       token = strtok(NULL, s);
+    }
+    return paramValue;
+}
+
 void httpd_task(void *pvParameters)
 {
     struct netconn *client = NULL;
@@ -409,9 +427,8 @@ void httpd_task(void *pvParameters)
                         p = strtok (NULL, "\r");
                     }
                     os_printf("uri_post12: %s", array[12]);
-                    os_printf("uri_post13: %s", array[13]);
-
                     os_printf("uri_post14: %s", array[14]);
+                    os_printf("uri_post14: %s", getParamValue("password",array[14]));
                     // if (!strncmp(uri, "/on", max_uri_len))
                     //     // gpio_write(2, false);
                     //     os_printf("should turn ON led");
