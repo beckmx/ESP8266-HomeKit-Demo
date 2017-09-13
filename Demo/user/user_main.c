@@ -310,7 +310,7 @@ void httpd_task(void *pvParameters)
     }
     netconn_bind(nc, IP_ADDR_ANY, 80);
     netconn_listen(nc);
-    char buf[512];
+    char buf[2048];
     const char *saveOk={
         "HTTP/1.1 200 OK\r\n"
     };
