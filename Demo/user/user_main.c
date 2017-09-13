@@ -300,6 +300,8 @@ void test_task(void *pvParameters)
     }
 }
 
+
+
 void httpd_task(void *pvParameters)
 {
     struct netconn *client = NULL;
@@ -395,7 +397,6 @@ void httpd_task(void *pvParameters)
                     os_printf("uri_post12: %s", array[12]);
                     os_printf("uri_post13: %s", array[13]);
                     os_printf("uri_post14: %s", array[14]);
-                    os_printf("uri_post15: %s", array[15]);
                     // if (!strncmp(uri, "/on", max_uri_len))
                     //     // gpio_write(2, false);
                     //     os_printf("should turn ON led");
