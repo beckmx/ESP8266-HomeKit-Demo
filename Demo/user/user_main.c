@@ -317,7 +317,7 @@ void saveToFile(char *content, char *fileName){
 
 char getParamValue(char *paramName, char *queryString){
     char *token;
-    char *paramValue;
+    char paramValue;
     /* get the first token */
     token = strtok(queryString, "&");
     while( token != NULL ) 
