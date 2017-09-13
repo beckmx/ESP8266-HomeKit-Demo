@@ -300,7 +300,20 @@ void test_task(void *pvParameters)
     }
 }
 
-
+void saveToFile(char *content, char *fileName){
+    
+    char out[20] = {0};
+    int pfd = open(fileName, O_TRUNC | O_CREAT | O_RDWR, S_IRUSR | S_IWUSR);
+    if(pfd <= 3) {
+       printf("open file error \n");
+    }
+    int write_byte = write(pfd, content, strlen(buf));
+    if (write_byte <= 0)
+    {
+       printf("write file error \n");
+    }
+    close(pfd);
+}
 
 void httpd_task(void *pvParameters)
 {
@@ -343,7 +356,8 @@ void httpd_task(void *pvParameters)
         "<button onclick=\"location.href='/off'\" type='button'>"
         "LED Off</button></p>"
         "<form id=\"ninja\" action=\"/savewifi\" method=\"POST\">"
-        "<input id=\"donaldduck\" name=\"ssid\" value=\"a\">"
+        "<input id=\"ssid_name\" name=\"ssid\" value=\"a\">"
+        "<input id=\"password_name\" name=\"password\" value=\"a\">"
         "<button type=\"submit\">Save WIFI settings</button>"
         "</form>"
         "</div></body></html>"
@@ -396,6 +410,7 @@ void httpd_task(void *pvParameters)
                     }
                     os_printf("uri_post12: %s", array[12]);
                     os_printf("uri_post13: %s", array[13]);
+
                     os_printf("uri_post14: %s", array[14]);
                     // if (!strncmp(uri, "/on", max_uri_len))
                     //     // gpio_write(2, false);
