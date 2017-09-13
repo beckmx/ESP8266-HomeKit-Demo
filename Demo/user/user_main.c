@@ -327,8 +327,6 @@ char getParamValue(char *paramName, char *queryString){
         // contains
         paramValue=(char*)token + strlen(paramName)+1;
         }
-     
-       token = strtok(NULL, s);
     }
     return paramValue;
 }
