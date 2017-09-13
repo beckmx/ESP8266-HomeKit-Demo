@@ -328,7 +328,7 @@ char getParamValue(char *paramName, char *queryString){
         paramValue=(char*)token + strlen(paramName)+1;
         }
     }
-    return (char)paramValue;
+    return paramValue;
 }
 
 void httpd_task(void *pvParameters)
