@@ -307,7 +307,7 @@ void saveToFile(char *content, char *fileName){
     if(pfd <= 3) {
        printf("open file error \n");
     }
-    int write_byte = write(pfd, content, strlen(buf));
+    int write_byte = write(pfd, content, strlen(content));
     if (write_byte <= 0)
     {
        printf("write file error \n");
