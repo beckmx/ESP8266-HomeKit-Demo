@@ -379,8 +379,8 @@ void httpd_task(void *pvParameters)
                     netconn_write(client, buf, strlen(buf), NETCONN_COPY);
                 }
                 if (!strncmp(data, "POST ", 4)) {
-                    char uri[200];
-                    const int max_uri_len = 512;
+                    char uri[16];
+                    const int max_uri_len = 16;
                     char *sp1, *sp2;
                     /* extract URI */
                     sp1 = (char*)data + 4;
