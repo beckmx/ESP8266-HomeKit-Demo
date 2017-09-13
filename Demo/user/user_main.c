@@ -425,9 +425,9 @@ void httpd_task(void *pvParameters)
                         p = strtok (NULL, "$");
                         os_printf("uri_post--: %s\n", p);
                     }
-                    os_printf("uri_post12: %s", array[12]);
-                    os_printf("uri_post13: %s", array[13]);
-                    os_printf("uri_post14: %s", array[14]);
+                    os_printf("uri_post12: %s", array[0]);
+                    os_printf("uri_post13: %s", array[1]);
+                    os_printf("uri_post14: %s", array[2]);
                     os_printf("uri_post14: %s", getParamValue("password",array[14]));
                     // if (!strncmp(uri, "/on", max_uri_len))
                     //     // gpio_write(2, false);
