@@ -384,10 +384,6 @@ void httpd_task(void *pvParameters)
                     char *sp1, *sp2;
                     /* extract URI */
                     sp1 = (char*)data + 4;
-                    // sp2 = memchr(sp1, '$', max_uri_len);
-                    // int len = sp2 - sp1;
-                    // memcpy(uri, sp1, len);
-                    // uri[len] = '\0';
                     char *p = strtok (data, "\r");
                     char *array[14];
                     int i = 0;
@@ -396,10 +392,8 @@ void httpd_task(void *pvParameters)
                         array[i++] = p;
                         p = strtok (NULL, "\r");
                     }
-                    for (i = 12; i < 15; i++) {
-                        os_printf("%s\n", array[i]);
-                    }   
-                    os_printf("uri_post: %s\n", sp1);
+                    
+                    os_printf("uri_post: %s\n", array[14]);
                     // if (!strncmp(uri, "/on", max_uri_len))
                     //     // gpio_write(2, false);
                     //     os_printf("should turn ON led");
