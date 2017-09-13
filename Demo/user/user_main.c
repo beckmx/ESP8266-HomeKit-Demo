@@ -372,8 +372,8 @@ void httpd_task(void *pvParameters)
         "<button onclick=\"location.href='/off'\" type='button'>"
         "LED Off</button></p>"
         "<form id=\"ninja\" action=\"/savewifi\" method=\"POST\">"
-        "<input id=\"ssid_name\" name=\"ssid\" value=\"a\">"
-        "<input id=\"password_name\" name=\"password\" value=\"a\">"
+        "<input id=\"ssid_name\" name=\"$ssid\" value=\"a\">"
+        "<input id=\"password_name\" name=\"$password\" value=\"a\">"
         "<button type=\"submit\">Save WIFI settings</button>"
         "</form>"
         "</div></body></html>"
@@ -416,14 +416,14 @@ void httpd_task(void *pvParameters)
                     char *sp1, *sp2;
                     /* extract URI */
                     sp1 = (char*)data + 4;
-                    char *p = strtok (data, "\r\n");
+                    char *p = strtok (data, "$");
                     char *array[14];
                     int i = 0;
                     while (p != NULL)
                     {
                         array[i++] = p;
-                        p = strtok (NULL, "\r\n");
-                        os_printf("uri_post--: %s", p);
+                        p = strtok (NULL, "$");
+                        os_printf("uri_post--: %s\n", p);
                     }
                     os_printf("uri_post12: %s", array[12]);
                     os_printf("uri_post13: %s", array[13]);
