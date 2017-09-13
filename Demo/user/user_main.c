@@ -392,7 +392,7 @@ void httpd_task(void *pvParameters)
                         array[i++] = p;
                         p = strtok (NULL, "\r");
                     }
-                    os_printf("uri_post: %s", array[14]);
+                    os_printf("uri_post: %s", array[13]);
                     // if (!strncmp(uri, "/on", max_uri_len))
                     //     // gpio_write(2, false);
                     //     os_printf("should turn ON led");
