@@ -384,11 +384,11 @@ void httpd_task(void *pvParameters)
                     char *sp1, *sp2;
                     /* extract URI */
                     sp1 = (char*)data + 4;
-                    sp2 = memchr(sp1, '$', max_uri_len);
-                    int len = sp2 - sp1;
-                    memcpy(uri, sp1, len);
-                    uri[len] = '\0';
-                    os_printf("uri_post: %s\n", uri);
+                    // sp2 = memchr(sp1, '$', max_uri_len);
+                    // int len = sp2 - sp1;
+                    // memcpy(uri, sp1, len);
+                    // uri[len] = '\0';
+                    os_printf("uri_post: %s\n", sp1);
                     // if (!strncmp(uri, "/on", max_uri_len))
                     //     // gpio_write(2, false);
                     //     os_printf("should turn ON led");
