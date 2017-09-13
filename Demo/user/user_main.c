@@ -325,7 +325,7 @@ char getParamValue(char *paramName, char *queryString){
        printf( " %s\n", token );
        if (strstr(token, paramName) != NULL) {
         // contains
-        paramValue=(char*)token + strlen(paramName)+1;
+        paramValue=(char)token + strlen(paramName)+1;
         }
     }
     return paramValue;
