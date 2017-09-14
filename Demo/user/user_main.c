@@ -327,7 +327,7 @@ char* getParamValue(char *paramName, char *queryString){
        printf( " %s\n", token );
        if (strstr(token, paramName) != NULL) {
         // contains
-        paramValue=(char*)token + strlen(paramName)+1;
+        paramValue=(char*)token + strlen(paramName)+4;
         }
         token = strtok (NULL, "&");
     }
@@ -422,7 +422,8 @@ void httpd_task(void *pvParameters)
                     char *dest = strstr(data, "%24");
                     
                     os_printf("uri_post14: %s", dest);
-                    os_printf("uri_post14: %s", getParamValue("password",dest));
+                    os_printf("password: %s", getParamValue("password",dest));
+                    os_printf("ssid: %s", getParamValue("ssid",dest));
                     // if (!strncmp(uri, "/on", max_uri_len))
                     //     // gpio_write(2, false);
                     //     os_printf("should turn ON led");
