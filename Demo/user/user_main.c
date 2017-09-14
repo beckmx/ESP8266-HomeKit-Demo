@@ -327,6 +327,7 @@ char* getParamValue(char *paramName, char *queryString){
         // contains
         paramValue=(char*)token + strlen(paramName)+1;
         }
+        token = strtok (NULL, "&");
     }
     return paramValue;
 }
@@ -416,19 +417,19 @@ void httpd_task(void *pvParameters)
                     char *sp1, *sp2;
                     /* extract URI */
                     sp1 = (char*)data + 4;
-                    char *p = strtok (data, "\r\r\r");
+                    char *p = strtok (data, "%24");
                     char *array[14];
                     int i = 0;
                     while (p != NULL)
                     {
                         array[i++] = p;
-                        p = strtok (NULL, "\r\r\r");
+                        p = strtok (NULL, "%24");
                         os_printf("uri_post--: %s\n", p);
                     }
                     os_printf("uri_post12: %s", array[0]);
                     os_printf("uri_post13: %s", array[1]);
                     os_printf("uri_post14: %s", array[2]);
-                    os_printf("uri_post14: %s", getParamValue("password",array[14]));
+                    //os_printf("uri_post14: %s", getParamValue("password",array[14]));
                     // if (!strncmp(uri, "/on", max_uri_len))
                     //     // gpio_write(2, false);
                     //     os_printf("should turn ON led");
