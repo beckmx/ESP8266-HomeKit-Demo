@@ -315,6 +315,51 @@ void saveToFile(char *content, char *fileName){
     close(pfd);
 }
 
+void string_replace(const String& find, const String& replace) {
+    if(len == 0 || find.len == 0)
+        return;
+    int diff = replace.len - find.len;
+    char *readFrom = buffer;
+    char *foundAt;
+    if(diff == 0) {
+        while((foundAt = strstr(readFrom, find.buffer)) != NULL) {
+            memcpy(foundAt, replace.buffer, replace.len);
+            readFrom = foundAt + replace.len;
+        }
+    } else if(diff < 0) {
+        char *writeTo = buffer;
+        while((foundAt = strstr(readFrom, find.buffer)) != NULL) {
+            unsigned int n = foundAt - readFrom;
+            memcpy(writeTo, readFrom, n);
+            writeTo += n;
+            memcpy(writeTo, replace.buffer, replace.len);
+            writeTo += replace.len;
+            readFrom = foundAt + find.len;
+            len += diff;
+        }
+        strcpy(writeTo, readFrom);
+    } else {
+        unsigned int size = len; // compute size needed for result
+        while((foundAt = strstr(readFrom, find.buffer)) != NULL) {
+            readFrom = foundAt + find.len;
+            size += diff;
+        }
+        if(size == len)
+            return;
+        if(size > capacity && !changeBuffer(size))
+            return; // XXX: tell user!
+        int index = len - 1;
+        while(index >= 0 && (index = lastIndexOf(find, index)) >= 0) {
+            readFrom = buffer + index + find.len;
+            memmove(readFrom + diff, readFrom, len - (readFrom - buffer));
+            len += diff;
+            buffer[len] = 0;
+            memcpy(buffer + index, replace.buffer, replace.len);
+            index--;
+        }
+    }
+}
+
 char* getParamValue(char *paramName, char *queryString){
     char *token;
     char *paramValue;
@@ -420,9 +465,7 @@ void httpd_task(void *pvParameters)
                     
                     char *source = "XXXXabcYYYY";
                     char *dest = strstr(data, "%24");
-                    int pos;
                     
-                    pos = dest - source;
                     os_printf("uri_post14: %s", dest);
                     //os_printf("uri_post14: %s", getParamValue("password",array[14]));
                     // if (!strncmp(uri, "/on", max_uri_len))
