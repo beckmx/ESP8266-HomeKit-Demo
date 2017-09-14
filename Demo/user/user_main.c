@@ -291,8 +291,7 @@ void mount_filesystem()
 }
 
 void saveToFile(char *content, char *fileName){
-    
-    char out[20] = {0};
+    strcat(content,"\0");
     int pfd = open(fileName, O_TRUNC | O_CREAT | O_RDWR, S_IRUSR | S_IWUSR);
     if(pfd <= 3) {
         os_printf("open file error \n");
@@ -317,7 +316,6 @@ char* getParamValue(char *paramName, char *queryString){
        if (strstr(token, paramName) != NULL) {
         // contains
         paramValue=(char*)token + strlen(paramName)+4;
-        strcat(paramValue,"\0");
         }
         token = strtok (NULL, "&");
     }
