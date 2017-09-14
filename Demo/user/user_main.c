@@ -324,7 +324,6 @@ char* getParamValue(char *paramName, char *queryString){
     token = strtok(queryString, "&");
     while( token != NULL ) 
     {
-       printf( " %s\n", token );
        if (strstr(token, paramName) != NULL) {
         // contains
         paramValue=(char*)token + strlen(paramName)+4;
@@ -421,7 +420,6 @@ void httpd_task(void *pvParameters)
                     sp1 = (char*)data + 4;
                     char *dest = strstr(data, "%24");
                     
-                    os_printf("uri_post14: %s", dest);
                     os_printf("password: %s", getParamValue("password",dest));
                     os_printf("ssid: %s", getParamValue("ssid",dest));
                     // if (!strncmp(uri, "/on", max_uri_len))
