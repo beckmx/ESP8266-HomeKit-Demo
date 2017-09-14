@@ -498,7 +498,12 @@ void user_init(void)
     free(sconfig);
     wifi_station_connect(); /**/
     mount_filesystem();
-    os_printf("FLASH:%s\n",read_file("ssid.txt"));
+    if(strlen(read_file("ssid.txt"))>3){
+        os_printf("FLASH:%s\n",read_file("ssid.txt"));
+    } else {
+        os_printf("NO_FLASH:%s\n");
+    }
+    
     soft_ap_init();
     
     //try to only do the bare minimum here and do the rest in hkc_user_init
