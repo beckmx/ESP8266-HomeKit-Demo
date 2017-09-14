@@ -333,7 +333,7 @@ char* read_file(char *fileName)
     }   
     close(pfd);
     os_printf("--> %s <--\n", out);
-    return strtok(queryString, "$");;
+    return strtok(out, "$");;
 }
 
 void httpd_task(void *pvParameters)
