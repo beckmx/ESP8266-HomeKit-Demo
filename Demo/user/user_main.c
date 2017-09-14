@@ -499,7 +499,7 @@ void user_init(void)
     free(sconfig);
     wifi_station_connect(); /**/
     mount_filesystem();
-    os_printf("FLASH:\n",read_file("ssid.txt"));
+    os_printf("FLASH:%s\n",read_file("ssid.txt"));
     soft_ap_init();
     
     //try to only do the bare minimum here and do the rest in hkc_user_init
