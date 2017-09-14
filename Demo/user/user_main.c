@@ -323,7 +323,7 @@ char* getParamValue(char *paramName, char *queryString){
     return paramValue;
 }
 
-char read_file(char *fileName)
+char* read_file(char *fileName)
 {
     
     char out[20] = {0};
@@ -333,7 +333,7 @@ char read_file(char *fileName)
     }   
     close(pfd);
     os_printf("--> %s <--\n", out);
-    return out;
+    return (char*)out;
 }
 
 void httpd_task(void *pvParameters)
