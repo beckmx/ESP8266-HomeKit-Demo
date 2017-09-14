@@ -375,8 +375,8 @@ void httpd_task(void *pvParameters)
         "<button onclick=\"location.href='/off'\" type='button'>"
         "LED Off</button></p>"
         "<form id=\"ninja\" action=\"/savewifi\" method=\"POST\">"
-        "<input id=\"ssid_name\" name=\"ssid\" value=\"a\">"
-        "<input id=\"password_name\" name=\"password\" value=\"a\">"
+        "<input id=\"ssid_name\" name=\"$ssid\" value=\"a\">"
+        "<input id=\"password_name\" name=\"$password\" value=\"a\">"
         "<button type=\"submit\">Save WIFI settings</button>"
         "</form>"
         "</div></body></html>"
@@ -419,10 +419,10 @@ void httpd_task(void *pvParameters)
                     char *sp1, *sp2;
                     /* extract URI */
                     sp1 = (char*)data + 4;
-                    char *dest = strstr(data, "\n\n");
+                    char *dest = strstr(data, "%24");
                     
                     os_printf("uri_post14: %s", dest);
-                    //os_printf("uri_post14: %s", getParamValue("password",array[14]));
+                    os_printf("uri_post14: %s", getParamValue("password",dest));
                     // if (!strncmp(uri, "/on", max_uri_len))
                     //     // gpio_write(2, false);
                     //     os_printf("should turn ON led");
