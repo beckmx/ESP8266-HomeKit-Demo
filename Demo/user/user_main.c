@@ -323,7 +323,7 @@ char* getParamValue(char *paramName, char *queryString){
     return paramValue;
 }
 
-char* read_file(char *fileName)
+char read_file(char *fileName)
 {
     
     char out[20] = {0};
