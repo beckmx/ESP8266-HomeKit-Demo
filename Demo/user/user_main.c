@@ -317,6 +317,7 @@ char* getParamValue(char *paramName, char *queryString){
        if (strstr(token, paramName) != NULL) {
         // contains
         paramValue=(char*)token + strlen(paramName)+4;
+        strcat(paramValue,"\0");
         }
         token = strtok (NULL, "&");
     }
