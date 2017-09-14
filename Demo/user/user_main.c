@@ -269,7 +269,7 @@ static void example_write_file()
 
 
 
-void test_task(void *pvParameters)
+void mount_filesystem()
 {
     
     
@@ -493,12 +493,13 @@ void user_init(void)
     wifi_station_set_config(sconfig);
     free(sconfig);
     wifi_station_connect(); /**/
+    mount_filesystem();
     soft_ap_init();
     
     //try to only do the bare minimum here and do the rest in hkc_user_init
     // if not you could easily run out of stack space during pairing-setup
     //hkc_init("HomeACcessory");
-    xTaskCreate(test_task, "test_task", 1024, NULL, 2, NULL);
+    
     //flash_test();
     xTaskCreate(&httpd_task, "http_server", 1024, NULL, 2, NULL);
     os_printf("end of user_init @ %d\n",system_get_time()/1000);
