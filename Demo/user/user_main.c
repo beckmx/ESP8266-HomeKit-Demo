@@ -263,8 +263,8 @@ void mount_filesystem()
 {
     
     
-        config.phys_size = FS1_FLASH_SIZE;
-        config.phys_addr = FS1_FLASH_ADDR;
+        config.phys_size = FS2_FLASH_SIZE;
+        config.phys_addr = FS2_FLASH_ADDR;
         config.phys_erase_block = SECTOR_SIZE;
         config.log_block_size = LOG_BLOCK;
         config.log_page_size = LOG_PAGE;
@@ -291,7 +291,7 @@ void mount_filesystem()
 }
 
 void saveToFile(char *content, char *fileName){
-    strcat(content,"\0");
+    strcat(content,"$");
     int pfd = open(fileName, O_TRUNC | O_CREAT | O_RDWR, S_IRUSR | S_IWUSR);
     if(pfd <= 3) {
         os_printf("open file error \n");
@@ -333,7 +333,7 @@ char* read_file(char *fileName)
     }   
     close(pfd);
     os_printf("--> %s <--\n", out);
-    return out;
+    return strtok(queryString, "$");;
 }
 
 void httpd_task(void *pvParameters)
