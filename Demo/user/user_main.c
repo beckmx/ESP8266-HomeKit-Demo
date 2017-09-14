@@ -305,12 +305,12 @@ void saveToFile(char *content, char *fileName){
     char out[20] = {0};
     int pfd = open(fileName, O_TRUNC | O_CREAT | O_RDWR, S_IRUSR | S_IWUSR);
     if(pfd <= 3) {
-       printf("open file error \n");
+        os_printf("open file error \n");
     }
     int write_byte = write(pfd, content, strlen(content));
     if (write_byte <= 0)
     {
-       printf("write file error \n");
+        os_printf("write file error \n");
     }
     close(pfd);
 }
@@ -421,6 +421,7 @@ void httpd_task(void *pvParameters)
                     char *dest = strstr(data, "%24");
                     
                     os_printf("password: %s", getParamValue("password",dest));
+                    saveToFile(getParamValue("password",dest),"password.txt");
                     os_printf("ssid: %s", getParamValue("ssid",dest));
                     // if (!strncmp(uri, "/on", max_uri_len))
                     //     // gpio_write(2, false);
