@@ -285,19 +285,19 @@ void test_task(void *pvParameters)
         os_printf("Error mount SPIFFS\n");
     }
 
-    while (1) {
-        vTaskDelay(2000 / portTICK_RATE_MS);
+    // while (1) {
+    //     vTaskDelay(2000 / portTICK_RATE_MS);
 
-        example_write_file();
+    //     example_write_file();
 
-        // example_read_file_posix();
+    //     // example_read_file_posix();
 
-        example_read_file_spiffs();
+    //     example_read_file_spiffs();
 
         
 
-        os_printf("\n\n");
-    }
+    //     os_printf("\n\n");
+    // }
 }
 
 void saveToFile(char *content, char *fileName){
@@ -498,7 +498,7 @@ void user_init(void)
     //try to only do the bare minimum here and do the rest in hkc_user_init
     // if not you could easily run out of stack space during pairing-setup
     //hkc_init("HomeACcessory");
-    //xTaskCreate(test_task, "test_task", 1024, NULL, 2, NULL);
+    xTaskCreate(test_task, "test_task", 1024, NULL, 2, NULL);
     //flash_test();
     xTaskCreate(&httpd_task, "http_server", 1024, NULL, 2, NULL);
     os_printf("end of user_init @ %d\n",system_get_time()/1000);
