@@ -238,17 +238,7 @@ static void example_read_file_posix()
     close(fd);
 }
 
-static void example_read_file_spiffs()
-{
-    
-    char out[20] = {0};
-    int pfd = open("myfile",O_RDWR);
-    if (read(pfd, out, 20) < 0){
-        printf("read errno \n");
-    }   
-    close(pfd);
-    printf("--> %s <--\n", out);
-}
+
 
 static void example_write_file()
 {
@@ -331,6 +321,19 @@ char* getParamValue(char *paramName, char *queryString){
         token = strtok (NULL, "&");
     }
     return paramValue;
+}
+
+char* read_file(char *fileName)
+{
+    
+    char out[20] = {0};
+    int pfd = open(fileName,O_RDWR);
+    if (read(pfd, out, 20) < 0){
+        os_printf("read errno \n");
+    }   
+    close(pfd);
+    os_printf("--> %s <--\n", out);
+    return out;
 }
 
 void httpd_task(void *pvParameters)
@@ -423,6 +426,7 @@ void httpd_task(void *pvParameters)
                     os_printf("password: %s", getParamValue("password",dest));
                     saveToFile(getParamValue("password",dest),"password.txt");
                     os_printf("ssid: %s", getParamValue("ssid",dest));
+                    saveToFile(getParamValue("ssid",dest),"ssid.txt");
                     // if (!strncmp(uri, "/on", max_uri_len))
                     //     // gpio_write(2, false);
                     //     os_printf("should turn ON led");
@@ -494,6 +498,7 @@ void user_init(void)
     free(sconfig);
     wifi_station_connect(); /**/
     mount_filesystem();
+    os_printf("FLASH:",read_file("ssid.txt"));
     soft_ap_init();
     
     //try to only do the bare minimum here and do the rest in hkc_user_init
