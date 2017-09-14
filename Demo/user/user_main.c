@@ -500,18 +500,29 @@ void user_init(void)
     mount_filesystem();
     if(strlen(read_file("ssid.txt"))>3){
         os_printf("FLASH:%s\n",read_file("ssid.txt"));
+        wifi_set_opmode(STATION_MODE); 
+        struct station_config *sconfig = (struct station_config *)zalloc(sizeof(struct station_config));
+        sprintf(sconfig->ssid, "Unknown"); //don't forget to set this if you use it
+        sprintf(sconfig->password, "daredevilme"); //don't forget to set this if you use it
+        wifi_station_set_config(sconfig);
+        free(sconfig);
+        wifi_station_connect();
+        hkc_init("HomeACcessory");
     } else {
-        os_printf("NO_FLASH:%s\n");
+        int r = rand() % 999;
+        soft_ap_init();
+        xTaskCreate(&httpd_task, "http_server", 1024, NULL, 2, NULL);
+        os_printf("NO_FLASH:%i\n", r);
     }
     
-    soft_ap_init();
+    
     
     //try to only do the bare minimum here and do the rest in hkc_user_init
     // if not you could easily run out of stack space during pairing-setup
     //hkc_init("HomeACcessory");
     
     //flash_test();
-    xTaskCreate(&httpd_task, "http_server", 1024, NULL, 2, NULL);
+    
     os_printf("end of user_init @ %d\n",system_get_time()/1000);
 }
 
