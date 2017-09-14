@@ -326,14 +326,15 @@ char* getParamValue(char *paramName, char *queryString){
 char* read_file(char *fileName)
 {
     
-    char out[20] = {0};
+    
+    char *out = malloc (sizeof (char) * 20);
     int pfd = open(fileName,O_RDWR);
     if (read(pfd, out, 20) < 0){
         os_printf("read errno \n");
     }   
     close(pfd);
     os_printf("--> %s <--\n", out);
-    return (char*)out;
+    return out;
 }
 
 void httpd_task(void *pvParameters)
