@@ -133,7 +133,7 @@ void led(int aid, int iid, cJSON *value, int mode)
             gpio_config(&gpio2_in_cfg);                                 //Initialization function
             led(aid,iid,value,1);
             gpio2.aid=aid; gpio2.iid=iid;
-            xTaskCreate(led_task,"led",512,NULL,2,NULL);
+            //xTaskCreate(led_task,"led",512,NULL,2,NULL);
         }break;
         case 2: { //update
             //do nothing
