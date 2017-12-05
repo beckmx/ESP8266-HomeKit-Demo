@@ -100,7 +100,7 @@ void    led_task(void *arg) //make transfer of gpio via arg, starting as a stati
     int     i,original;
     cJSON   *value;
 
-    os_printf("led_task started\n");
+    os_printf("led_task started--no timer\n");
     value=cJSON_CreateBool(0); //value doesn't matter
     //while(1) {
         //vTaskDelay(1500); //15 sec
