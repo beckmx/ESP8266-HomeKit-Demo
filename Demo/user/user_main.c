@@ -102,15 +102,15 @@ void    led_task(void *arg) //make transfer of gpio via arg, starting as a stati
 
     os_printf("led_task started\n");
     value=cJSON_CreateBool(0); //value doesn't matter
-    while(1) {
-        vTaskDelay(1500); //15 sec
+    //while(1) {
+        //vTaskDelay(1500); //15 sec
         original=GPIO_INPUT(GPIO_Pin_2); //get original state
 //      os_printf("original:%d\n",original);
         value->type=original^1;
         GPIO_OUTPUT(GPIO_Pin_2,original^1); // and toggle
         change_value(    gpio2.aid,gpio2.iid,value);
         send_events(NULL,gpio2.aid,gpio2.iid);
-    }
+    //}
 }
 
 
