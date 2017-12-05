@@ -497,8 +497,6 @@ void user_init(void)
     wifi_station_set_config(sconfig);
     free(sconfig);
     wifi_station_connect(); /**/
-    int ran = rand() % 999;
-    os_printf("ping:%i\n", r);
     mount_filesystem();
     if(strlen(read_file("ssid.txt"))>3){
         os_printf("FLASH:%s\n",read_file("ssid.txt"));
