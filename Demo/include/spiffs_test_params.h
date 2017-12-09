@@ -12,14 +12,14 @@
  
  #define FS1_FLASH_ADDR      (1024*1024)
  #define FS2_FLASH_ADDR      (1280*1024)
- #define FS3_FLASH_ADDR      (1280*512)
+ #define FS3_FLASH_ADDR      (128*512)
  
  
  #define SECTOR_SIZE         (4*1024) 
  #define SECTOR_SIZE2         (4*512) 
  #define LOG_BLOCK           (SECTOR_SIZE)
  #define LOG_BLOCK2           (SECTOR_SIZE2)
- #define LOG_PAGE            (128)
+ #define LOG_PAGE            (256)
  
  #define FD_BUF_SIZE         32*4
  #define CACHE_BUF_SIZE      (LOG_PAGE + 32)*8

@@ -265,8 +265,8 @@ void mount_filesystem()
     
         config.phys_size = FS3_FLASH_SIZE;
         config.phys_addr = FS3_FLASH_ADDR;
-        config.phys_erase_block = SECTOR_SIZE2;
-        config.log_block_size = LOG_BLOCK2;
+        config.phys_erase_block = SECTOR_SIZE;
+        config.log_block_size = LOG_BLOCK;
         config.log_page_size = LOG_PAGE;
         config.fd_buf_size = FD_BUF_SIZE * 2;
         config.cache_buf_size = CACHE_BUF_SIZE;
