@@ -497,6 +497,31 @@ void user_init(void)
     wifi_station_set_config(sconfig);
     free(sconfig);
     wifi_station_connect(); /**/
+
+
+
+    // char    flash[80];
+    // uint32  start, sector = 0x13;
+    // char    signature[] = "HomeACcessoryKid";
+    // WC_RNG  rng;
+    // int     makekey=1;
+    // int     r;
+    // char    highuser[9],lowuser[9];
+    
+    // start=sector*0x1000;
+    // spi_flash_read(start+4080,(uint32 *)flash,16);flash[16]=0;
+    // #ifdef DEBUG0
+    // for (r=0;r<17;r++) os_printf("%02x",flash[r]);os_printf("\n");
+    // #endif
+    // if (strcmp(flash,signature)) {
+    //     #ifdef DEBUG0
+    //     os_printf("initializing flash in 15 seconds\n");
+    //     vTaskDelay(3000);
+    //     os_printf("initializing flash\n");
+    //     #endif
+    //     spi_flash_erase_sector(sector);
+    //     spi_flash_write(start+4080,(uint32 *)signature,16);
+    // }   
     mount_filesystem();
     if(strlen(read_file("ssid.txt"))>3){
         os_printf("FLASH:%s\n",read_file("ssid.txt"));
