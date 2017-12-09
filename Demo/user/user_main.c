@@ -332,7 +332,7 @@ char* read_file(char *fileName)
         os_printf("read errno \n");
     }   
     close(pfd);
-    // os_printf("--> %s <--\n", out);
+    os_printf("--> %s <--\n", out);
     return strtok(out, "$");;
 }
 
@@ -479,6 +479,8 @@ void soft_ap_init(void)
     wifi_softap_dhcps_start(); // enable soft-AP DHCP server
 }
 
+
+
 /******************************************************************************
  * FunctionName : user_init
  * Description  : entry of user application, init user function here
@@ -500,31 +502,31 @@ void user_init(void)
 
 
 
-    // char    flash[80];
-    // uint32  start, sector = 0x13;
-    // char    signature[] = "HomeACcessoryKid";
-    // WC_RNG  rng;
-    // int     makekey=1;
-    // int     r;
-    // char    highuser[9],lowuser[9];
+    char    flash[80];
+    uint32  start;
+    char    signature[] = "olakase";
     
-    // start=sector*0x1000;
-    // spi_flash_read(start+4080,(uint32 *)flash,16);flash[16]=0;
-    // #ifdef DEBUG0
-    // for (r=0;r<17;r++) os_printf("%02x",flash[r]);os_printf("\n");
-    // #endif
-    // if (strcmp(flash,signature)) {
-    //     #ifdef DEBUG0
-    //     os_printf("initializing flash in 15 seconds\n");
-    //     vTaskDelay(3000);
-    //     os_printf("initializing flash\n");
-    //     #endif
-    //     spi_flash_erase_sector(sector);
-    //     spi_flash_write(start+4080,(uint32 *)signature,16);
-    // }   
-    mount_filesystem();
-    os_printf("LENGTH:%d\n",strlen(read_file("ssid.txt")));
-    if(strlen(read_file("ssid.txt"))>3){
+    start=0x79455;
+    spi_flash_read(start,(uint32 *)flash,16);flash[16]=0;
+    #ifdef DEBUG0
+    for (r=0;r<17;r++) os_printf("%02x",flash[r]);os_printf("\n");
+    #endif
+    if (strcmp(flash,signature)) {
+        #ifdef DEBUG0
+        os_printf("initializing custom saving\n");
+        vTaskDelay(1000);
+        #endif
+        spi_flash_write(start,(uint32 *)signature,16);
+    }   
+    
+    //mount_filesystem();
+    //if(strlen(read_file("ssid.txt"))>3){
+    if (strcmp(flash,signature)){
+        int r = rand() % 999;
+        soft_ap_init();
+        xTaskCreate(&httpd_task, "http_server", 1024, NULL, 2, NULL);
+        os_printf("NO_FLASH:%i\n", r);
+    } else {
         os_printf("FLASH:%s\n",read_file("ssid.txt"));
         wifi_set_opmode(STATION_MODE); 
         struct station_config *sconfig = (struct station_config *)zalloc(sizeof(struct station_config));
@@ -534,11 +536,6 @@ void user_init(void)
         free(sconfig);
         wifi_station_connect();
         hkc_init("HomeACcessory");
-    } else {
-        int r = rand() % 999;
-        soft_ap_init();
-        xTaskCreate(&httpd_task, "http_server", 1024, NULL, 2, NULL);
-        os_printf("NO_FLASH:%i\n", r);
     }
     
     
