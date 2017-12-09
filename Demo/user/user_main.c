@@ -332,7 +332,7 @@ char* read_file(char *fileName)
         os_printf("read errno \n");
     }   
     close(pfd);
-    os_printf("--> %s <--\n", out);
+    // os_printf("--> %s <--\n", out);
     return strtok(out, "$");;
 }
 
@@ -523,6 +523,7 @@ void user_init(void)
     //     spi_flash_write(start+4080,(uint32 *)signature,16);
     // }   
     mount_filesystem();
+    os_printf("LENGTH:%d\n",strlen(read_file("ssid.txt")));
     if(strlen(read_file("ssid.txt"))>3){
         os_printf("FLASH:%s\n",read_file("ssid.txt"));
         wifi_set_opmode(STATION_MODE); 
