@@ -305,20 +305,20 @@ void saveToFile(char *content, char *fileName){
 }
 
 void saveSSID(char *content){
-    char    flash[80];
     uint32  start;
     char buff[16] = {0};
     strcpy(buff, content);
     start=0x79455;
+    spi_flash_erase_sector(0x7945);
     spi_flash_write(start,(uint32 *)buff,16);
 }
 
 void savePassword(char *content){
-    char    flash[80];
     uint32  start;
     char buff[16] = {0};
     strcpy(buff, content);
     start=0x794c4;
+    spi_flash_erase_sector(0x794c);
     spi_flash_write(start,(uint32 *)buf,16); 
 }
 
@@ -522,7 +522,7 @@ void user_init(void)
 
     char    flash[80];
     uint32  start;
-    char    signature[] = "olakase";
+    char    signature[] = "xxxxx";
     
     start=0x79455;
     spi_flash_read(start,(uint32 *)flash,16);flash[16]=0;
