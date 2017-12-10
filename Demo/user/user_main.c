@@ -307,19 +307,19 @@ void saveToFile(char *content, char *fileName){
 void saveSSID(char *content){
     char    flash[80];
     uint32  start;
-    
+    char buff[16] = {0};
+    strcpy(buff, content);
     start=0x79455;
-    vTaskDelay(1000);
-    spi_flash_write(start,(uint32 *)content,16);
+    spi_flash_write(start,(uint32 *)buff,16);
 }
 
 void savePassword(char *content){
     char    flash[80];
     uint32  start;
-    
+    char buff[16] = {0};
+    strcpy(buff, content);
     start=0x794c4;
-    vTaskDelay(1000);
-    spi_flash_write(start,(uint32 *)content,16); 
+    spi_flash_write(start,(uint32 *)buf,16); 
 }
 
 
@@ -526,17 +526,6 @@ void user_init(void)
     
     start=0x79455;
     spi_flash_read(start,(uint32 *)flash,16);flash[16]=0;
-    #ifdef DEBUG0
-    for (r=0;r<17;r++) os_printf("%02x",flash[r]);os_printf("\n");
-    #endif
-    if (strcmp(flash,signature)) {
-        #ifdef DEBUG0
-        os_printf("initializing custom saving\n");
-        vTaskDelay(1000);
-        #endif
-        spi_flash_write(start,(uint32 *)signature,16);
-    }   
-    
     //mount_filesystem();
     //if(strlen(read_file("ssid.txt"))>3){
     if (strcmp(flash,signature)){
