@@ -319,7 +319,7 @@ void savePassword(char *content){
     strcpy(buff, content);
     start=0x794c4;
     spi_flash_erase_sector(0x794c);
-    spi_flash_write(start,(uint32 *)buf,16); 
+    spi_flash_write(start,(uint32 *)buff,16); 
 }
 
 
