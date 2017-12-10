@@ -304,6 +304,24 @@ void saveToFile(char *content, char *fileName){
     close(pfd);
 }
 
+void saveSSID(char *content){
+    char    flash[80];
+    uint32  start;
+    
+    start=0x79455;
+    vTaskDelay(1000);
+    spi_flash_write(start,(uint32 *)content,16);
+}
+
+void savePassword(char *content){
+    char    flash[80];
+    uint32  start;
+    
+    start=0x794c4;
+    vTaskDelay(1000);
+    spi_flash_write(start,(uint32 *)content,16); 
+}
+
 
 
 char* getParamValue(char *paramName, char *queryString){
@@ -424,9 +442,9 @@ void httpd_task(void *pvParameters)
                     char *dest = strstr(data, "%24");
                     
                     os_printf("password: %s", getParamValue("password",dest));
-                    saveToFile(getParamValue("password",dest),"password.txt");
+                    savePassword(getParamValue("password",dest));
                     os_printf("ssid: %s", getParamValue("ssid",dest));
-                    saveToFile(getParamValue("ssid",dest),"ssid.txt");
+                    saveSSID(getParamValue("ssid",dest));
                     // if (!strncmp(uri, "/on", max_uri_len))
                     //     // gpio_write(2, false);
                     //     os_printf("should turn ON led");
