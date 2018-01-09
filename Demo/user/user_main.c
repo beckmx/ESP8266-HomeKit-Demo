@@ -409,6 +409,7 @@ void httpd_task(void *pvParameters)
                 void *data;
                 u16_t len;
                 netbuf_data(nb, &data, &len);
+                os_printf("data: %s\n", data);
                 /* check for a GET request */
                 if (!strncmp(data, "GET ", 4)) {
                     char uri[16];
@@ -458,6 +459,7 @@ void httpd_task(void *pvParameters)
                             (int) xPortGetFreeHeapSize());
                     netconn_write(client, buf, strlen(buf), NETCONN_COPY);
                 }
+
             }
             netbuf_delete(nb);
         }
