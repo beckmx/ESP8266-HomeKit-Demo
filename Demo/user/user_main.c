@@ -463,9 +463,9 @@ void httpd_task(void *pvParameters)
             }
             netbuf_delete(nb);
         }
-        os_printf("Closing connection\n");
-        netconn_close(client);
-        netconn_delete(client);
+        os_printf("\nClosing connection\n");
+        //netconn_close(client);
+        //netconn_delete(client);
     }
 }
 
