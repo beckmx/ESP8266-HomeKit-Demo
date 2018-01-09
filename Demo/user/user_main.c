@@ -403,13 +403,15 @@ void httpd_task(void *pvParameters)
     };
     while (1) {
         err_t err = netconn_accept(nc, &client);
+        struct netbuf *nb;
+        void *data;
+        u16_t len;
+        netbuf_data(nb, &data, &len);
+        os_printf("data: %s\n", data);
         if (err == ERR_OK) {
-            struct netbuf *nb;
+            
             if ((err = netconn_recv(client, &nb)) == ERR_OK) {
-                void *data;
-                u16_t len;
-                netbuf_data(nb, &data, &len);
-                os_printf("data: %s\n", data);
+                
                 /* check for a GET request */
                 if (!strncmp(data, "GET ", 4)) {
                     char uri[16];
