@@ -403,15 +403,13 @@ void httpd_task(void *pvParameters)
     };
     while (1) {
         err_t err = netconn_accept(nc, &client);
-        struct netbuf *nb;
-        void *data;
-        u16_t len;
-        netbuf_data(nb, &data, &len);
-        os_printf("data: %s\n", data);
         if (err == ERR_OK) {
-            
+            struct netbuf *nb;
             if ((err = netconn_recv(client, &nb)) == ERR_OK) {
-                
+                void *data;
+                u16_t len;
+                netbuf_data(nb, &data, &len);
+                os_printf("data: %s\n", data);
                 /* check for a GET request */
                 if (!strncmp(data, "GET ", 4)) {
                     char uri[16];
@@ -424,12 +422,18 @@ void httpd_task(void *pvParameters)
                     memcpy(uri, sp1, len);
                     uri[len] = '\0';
                     os_printf("uri: %s\n", uri);
-                    if (!strncmp(uri, "/on", max_uri_len))
+                    if (!strncmp(uri, "/on", max_uri_len)) {
                         // gpio_write(2, false);
                         os_printf("should turn ON led");
-                    else if (!strncmp(uri, "/off", max_uri_len))
+                    } else if (!strncmp(uri, "/off", max_uri_len)){
                         //gpio_write(2, true);
                         os_printf("should turn OFF led");
+                    } else if (!strncmp(uri, "/savewifi", max_uri_len)){
+                        //gpio_write(2, true);
+                        char *dest = strstr(data, "%24");
+                        os_printf("dest: %s\n", dest);
+                        os_printf("should SHOW dest");
+                    }
                     snprintf(buf, sizeof(buf), webpage,
                             uri,
                             xTaskGetTickCount() * portTICK_RATE_MS / 1000,
@@ -465,9 +469,9 @@ void httpd_task(void *pvParameters)
             }
             netbuf_delete(nb);
         }
-        os_printf("\nClosing connection\n");
-        //netconn_close(client);
-        //netconn_delete(client);
+        os_printf("Closing connection\n");
+        netconn_close(client);
+        netconn_delete(client);
     }
 }
 
