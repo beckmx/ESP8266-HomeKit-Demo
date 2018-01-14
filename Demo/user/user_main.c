@@ -432,7 +432,7 @@ void httpd_task(void *pvParameters)
                         //gpio_write(2, true);
                         char *dest = strstr(data, "%24");
                         os_printf("dest: %s\n", dest);
-                        char *dest = strstr(data, "$");
+                        *dest = strstr(data, "$");
                         os_printf("dest: %s\n", dest);
                         os_printf("should SHOW dest");
                     }
