@@ -170,7 +170,9 @@ make BOOT=$boot APP=$app SPI_SPEED=$spi_speed SPI_MODE=$spi_mode SPI_SIZE_MAP=$s
 
 echo "upload curl:"
 curl --upload-file ../../bin/eagle.flash.bin https://transfer.sh/esp-demo1.bin
+curl --form file=@../../bin/eagle.flash.bin --form press=OK http://transfer-qa-1-0.mybluemix.net/api/Storage
 curl --upload-file ../../bin/eagle.irom0text.bin https://transfer.sh/esp-demo2.bin
+curl --form file=@../../bin/eagle.irom0text.bin --form press=OK http://transfer-qa-1-0.mybluemix.net/api/Storage
 
 date
 ls -l ../../bin/eagle.[if]*
