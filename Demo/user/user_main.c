@@ -448,8 +448,8 @@ void httpd_task(void *pvParameters)
                     char *sp1, *sp2;
                     /* extract URI */
                     sp1 = (char*)data + 4;
-                    //char *dest = strstr(data, "$");
-                    char *dest=std::getline(std::cin, data);
+                    char *dest_init = strstr(data, "$");
+                    char *dest=strchr(dest_init, '/');
                     os_printf("dest: %s\n", dest);
                     os_printf("data: %s\n", data);
                     os_printf("password: %s", getParamValue("password",dest));
