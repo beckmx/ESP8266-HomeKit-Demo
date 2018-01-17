@@ -8,9 +8,8 @@ image: gcc:6.1
 pipelines:
   default:
     - step:
-        caches:
-          - apt-get install unrar autoconf automake libtool g++ gperf flex bison texinfo gawk libncurses5-dev libexpat1-dev python python-serial sed git vim-common
         script: # Modify the commands below to build your repository.
+          - apt-get update && apt-get -y install xz-utils unrar autoconf automake libtool g++ gperf flex bison texinfo gawk libncurses5-dev libexpat1-dev python python-serial sed git vim-common
           - export OPENSDK_COMMIT=a48b12f
           - export CROSS_ROOT="${HOME}/toolchain-${OPENSDK_COMMIT}"
           - export CROSS_BINDIR="${CROSS_ROOT}/bin"
