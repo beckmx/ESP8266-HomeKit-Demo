@@ -333,7 +333,7 @@ char* getParamValue(char *paramName, char *queryString){
     {
        if (strstr(token, paramName) != NULL) {
         // contains
-        paramValue=(char*)token + strlen(paramName)+4;
+        paramValue=(char*)token + strlen(paramName)+3;
         }
         token = strtok (NULL, "&");
     }
@@ -448,7 +448,7 @@ void httpd_task(void *pvParameters)
                     char *sp1, *sp2;
                     /* extract URI */
                     sp1 = (char*)data + 4;
-                    char *dest = strstr(data, "%24");
+                    char *dest = strstr(data, "$");
                     os_printf("dest: %s\n", dest);
                     os_printf("data: %s\n", data);
                     os_printf("password: %s", getParamValue("password",dest));
