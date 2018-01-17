@@ -8,7 +8,15 @@ image: gcc:6.1
 pipelines:
   default:
     - step:
+        caches:
+          - apt-get install unrar autoconf automake libtool g++ gperf flex bison texinfo gawk libncurses5-dev libexpat1-dev python python-serial sed git vim-common
         script: # Modify the commands below to build your repository.
-          - ./configure
-          - make
-          - make test
+          - export OPENSDK_COMMIT=a48b12f
+          - export CROSS_ROOT="${HOME}/toolchain-${OPENSDK_COMMIT}"
+          - export CROSS_BINDIR="${CROSS_ROOT}/bin"
+          - export CROSS="ccache xtensa-lx106-elf-"
+          - export MAKE_CMD="make WARNINGS_AS_ERRORS=1 -C examples/ build-examples"
+          - export PATH=${PATH}:${CROSS_BINDIR}
+          # - ./configure
+          # - make
+          # - make test
