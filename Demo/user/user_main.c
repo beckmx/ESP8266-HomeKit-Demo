@@ -452,8 +452,9 @@ void httpd_task(void *pvParameters)
                     int index;
                     char *dest_end=strchr(dest_init, '\n');
                     index = (int)(dest_end - dest_init);
-                    char *dest[40];
+                    char dest[40];
                     memcpy( dest, &dest_init[0], index );
+                    dest[index]='\0';
                     os_printf("dest: %s\n", dest);
                     //os_printf("data: %s\n", data);
                     os_printf("password: %s", getParamValue("password",dest));
