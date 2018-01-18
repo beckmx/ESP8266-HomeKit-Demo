@@ -458,9 +458,9 @@ void httpd_task(void *pvParameters)
                     os_printf("dest: %s\n", dest);
                     //os_printf("data: %s\n", data);
                     os_printf("password: %s", getParamValue("password",dest));
-                    savePassword(getParamValue("password",dest));
+                    //savePassword(getParamValue("password",dest));
                     os_printf("ssid: %s", getParamValue("ssid",dest));
-                    saveSSID(getParamValue("ssid",dest));
+                    //saveSSID(getParamValue("ssid",dest));
                     // if (!strncmp(uri, "/on", max_uri_len))
                     //     // gpio_write(2, false);
                     //     os_printf("should turn ON led");
