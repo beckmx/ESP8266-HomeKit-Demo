@@ -311,7 +311,7 @@ void saveSSID(char *content){
 
     size_t len = strlen(content);
     strcpy(buff, content);
-    buff[len]='\0';
+    //buff[len]='\0';
     
     start=0x79455;
     erasesector=0x79450;
@@ -325,7 +325,7 @@ void savePassword(char *content){
 
     size_t len = strlen(content);
     strcpy(buff, content);
-    buff[len]='\0';
+    //buff[len]='\0';
 
     start=0x794c4;
     //spi_flash_erase_sector(0x794c0);
@@ -467,10 +467,12 @@ void httpd_task(void *pvParameters)
                     dest[index]='\0';
                     os_printf("dest: %s\n", dest);
                     //os_printf("data: %s\n", data);
-                    os_printf("password: %s", getParamValue("password",dest));
-                    savePassword(getParamValue("password",dest));
                     os_printf("ssid: %s", getParamValue("ssid",dest));
+                    os_printf("password: %s", getParamValue("password",dest));
                     saveSSID(getParamValue("ssid",dest));
+                    savePassword(getParamValue("password",dest));
+                    
+                    
                     // if (!strncmp(uri, "/on", max_uri_len))
                     //     // gpio_write(2, false);
                     //     os_printf("should turn ON led");
