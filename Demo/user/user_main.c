@@ -305,20 +305,30 @@ void saveToFile(char *content, char *fileName){
 }
 
 void saveSSID(char *content){
-    uint32  start;
+    uint32  start,erasesector;
     char buff[16] = {0};
     strcpy(buff, content);
+
+    size_t len = strlen(content);
+    strcpy(buff, content);
+    buff[len]='\0';
+    
     start=0x79455;
-    spi_flash_erase_sector(0x79450);
+    erasesector=0x79450;
+    //spi_flash_erase_sector(erasesector);
     spi_flash_write(start,(uint32 *)buff,16);
 }
 
 void savePassword(char *content){
     uint32  start;
     char buff[16] = {0};
+
+    size_t len = strlen(content);
     strcpy(buff, content);
+    buff[len]='\0';
+
     start=0x794c4;
-    spi_flash_erase_sector(0x794c0);
+    //spi_flash_erase_sector(0x794c0);
     spi_flash_write(start,(uint32 *)buff,16); 
 }
 
