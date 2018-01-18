@@ -449,7 +449,13 @@ void httpd_task(void *pvParameters)
                     /* extract URI */
                     sp1 = (char*)data + 4;
                     char *dest_init = strstr(data, "$");
-                    char *dest=dest_init.substr(0,strchr(dest_init, '\n'));
+
+                    // char *dest=dest_init.substr(0,strchr(dest_init, '\n'));
+
+                    char dest[50];
+                    memcpy( dest, &dest_init[0], strchr(dest_init, '\n'));
+                    // subbuff[4] = '\0';
+
                     os_printf("dest: %s\n", dest);
                     //os_printf("data: %s\n", data);
                     os_printf("password: %s", getParamValue("password",dest));
