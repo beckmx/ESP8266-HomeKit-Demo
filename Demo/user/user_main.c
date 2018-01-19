@@ -338,7 +338,7 @@ char* getParamValue(char *paramName, char *queryString){
     char *token;
     char *paramValue;
     /* get the first token */
-    token = strtok(queryString, "$");
+    token = strtok(queryString, "&");
     while( token != NULL ) 
     {
         //os_printf("--> %s <--token\n", token);
@@ -346,7 +346,7 @@ char* getParamValue(char *paramName, char *queryString){
         // contains
         paramValue=(char*)token + strlen(paramName)+1;
         }
-        token = strtok (NULL, "$");
+        token = strtok (NULL, "&");
     }
     return paramValue;
 }
@@ -468,9 +468,9 @@ void httpd_task(void *pvParameters)
                     dest[index]='\0';
                     os_printf("dest: %s\n", dest);
                     //os_printf("data: %s\n", data);
-                    os_printf("ssid: %s", getParamValue("ssid",dest));
+                    os_printf("ssid: %s\n", getParamValue("ssid",dest));
                     //saveSSID(getParamValue("ssid",dest));
-                    os_printf("password: %s", getParamValue("password",dest));
+                    os_printf("password: %s\n", getParamValue("password",dest));
                     //savePassword(getParamValue("password",dest));
                     
                     
