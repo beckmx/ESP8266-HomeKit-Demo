@@ -468,8 +468,8 @@ void httpd_task(void *pvParameters)
                     os_printf("dest: %s\n", dest);
                     //os_printf("data: %s\n", data);
                     os_printf("ssid: %s", getParamValue("ssid",dest));
-                    os_printf("password: %s", getParamValue("password",dest));
                     saveSSID(getParamValue("ssid",dest));
+                    os_printf("password: %s", getParamValue("password",dest));
                     savePassword(getParamValue("password",dest));
                     
                     
