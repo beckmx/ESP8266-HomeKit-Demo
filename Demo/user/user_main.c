@@ -341,10 +341,10 @@ char* getParamValue(char *paramName, char *queryString){
     token = strtok(queryString, "$");
     while( token != NULL ) 
     {
-        os_printf("--> %s <--token\n", token);
+        //os_printf("--> %s <--token\n", token);
        if (strstr(token, paramName) != NULL) {
         // contains
-        paramValue=(char*)token + strlen(paramName)+2;
+        paramValue=(char*)token + strlen(paramName)+1;
         }
         token = strtok (NULL, "$");
     }
