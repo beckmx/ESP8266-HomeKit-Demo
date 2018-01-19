@@ -464,7 +464,7 @@ void httpd_task(void *pvParameters)
                     index = (int)(dest_end - dest_init);
                     char dest[40];
                     memcpy( dest, &dest_init[0], index );
-                    dest[index]='\0';
+                    //dest[index]='\0';
                     os_printf("dest: %s\n", dest);
                     //os_printf("data: %s\n", data);
                     os_printf("ssid: %s", getParamValue("ssid",dest));
