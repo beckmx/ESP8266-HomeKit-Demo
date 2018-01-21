@@ -315,7 +315,7 @@ void saveSSID(char *content){
     
     start=0x79455;
     erasesector=0x79450;
-    //spi_flash_erase_sector(erasesector);
+    spi_flash_erase_sector(erasesector);
     spi_flash_write(start,(uint32 *)buff,16);
 }
 
@@ -328,7 +328,7 @@ void savePassword(char *content){
     //buff[len]='\0';
 
     start=0x794c4;
-    //spi_flash_erase_sector(0x794c0);
+    spi_flash_erase_sector(0x794c0);
     spi_flash_write(start,(uint32 *)buff,16); 
 }
 
@@ -344,7 +344,7 @@ char* getParamValue(char *paramName, char *queryString){
         //os_printf("--> %s <--token\n", token);
        if (strstr(token, paramName) != NULL) {
         // contains
-        paramValue=(char*)token + strlen(paramName)+1;
+        paramValue=(char*)token + strlen(paramName)+2;
         }
         token = strtok (NULL, "&");
     }
@@ -467,12 +467,14 @@ void httpd_task(void *pvParameters)
                     memcpy( dest, &dest_init[0], index );
                     dest[index]='\0';
                     os_printf("dest: %s\n", dest);
+                    //looks like first the last parameters must be requested
                     os_printf("password: %s\n", getParamValue("password",dest));
+                    savePassword(getParamValue("password",dest));
                     //os_printf("data: %s\n", data);
                     os_printf("ssid: %s\n", getParamValue("ssid",dest));
-                    //saveSSID(getParamValue("ssid",dest));
+                    saveSSID(getParamValue("ssid",dest));
                     
-                    //savePassword(getParamValue("password",dest));
+                    
                     
                     
                     // if (!strncmp(uri, "/on", max_uri_len))
