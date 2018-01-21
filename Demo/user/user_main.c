@@ -307,7 +307,7 @@ void saveToFile(char *content, char *fileName){
 void saveSSID(char *content){
     uint32  start,erasesector;
     char buff[16] = {0};
-    strcpy(buff, content);
+    //strcpy(buff, content);
 
     size_t len = strlen(content);
     strcpy(buff, content);
@@ -469,7 +469,7 @@ void httpd_task(void *pvParameters)
                     os_printf("dest: %s\n", dest);
                     //looks like first the last parameters must be requested
                     os_printf("password: %s\n", getParamValue("password",dest));
-                    savePassword(getParamValue("password",dest));
+                    //savePassword(getParamValue("password",dest));
                     //os_printf("data: %s\n", data);
                     os_printf("ssid: %s\n", getParamValue("ssid",dest));
                     saveSSID(getParamValue("ssid",dest));
