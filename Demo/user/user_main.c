@@ -467,10 +467,11 @@ void httpd_task(void *pvParameters)
                     memcpy( dest, &dest_init[0], index );
                     dest[index]='\0';
                     os_printf("dest: %s\n", dest);
+                    os_printf("password: %s\n", getParamValue("password",dest));
                     //os_printf("data: %s\n", data);
                     os_printf("ssid: %s\n", getParamValue("ssid",dest));
                     //saveSSID(getParamValue("ssid",dest));
-                    os_printf("password: %s\n", getParamValue("password",dest));
+                    
                     //savePassword(getParamValue("password",dest));
                     
                     
