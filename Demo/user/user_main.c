@@ -311,11 +311,11 @@ void saveSSID(char *content){
 
     size_t len = strlen(content);
     strcpy(buff, content);
-    //buff[len]='\0';
+    buff[len]='\0';
     
     start=0x79455;
     erasesector=0x7945;
-    spi_flash_erase_sector(erasesector);
+    //spi_flash_erase_sector(erasesector);
     spi_flash_write(start,(uint32 *)buff,16);
 }
 
@@ -325,10 +325,10 @@ void savePassword(char *content){
 
     size_t len = strlen(content);
     strcpy(buff, content);
-    //buff[len]='\0';
+    buff[len]='\0';
 
     start=0x794c4;
-    spi_flash_erase_sector(0x794c);
+    //spi_flash_erase_sector(0x794c);
     spi_flash_write(start,(uint32 *)buff,16); 
 }
 
