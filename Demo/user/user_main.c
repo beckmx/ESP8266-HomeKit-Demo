@@ -604,7 +604,7 @@ void user_init(void)
         // sprintf(sconfig->password, "daredevilme"); //don't forget to set this if you use it
         //wifi_station_set_config(sconfig);
         xTaskCreate(&httpd_task, "http_server", 1024, NULL, 2, NULL);
-        free(sconfig);
+        //free(sconfig);
         wifi_station_connect();
         hkc_init("HomeACcessory");
     }
