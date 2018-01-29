@@ -472,7 +472,16 @@ void httpd_task(void *pvParameters)
                     //savePassword(getParamValue("password",dest));
                     //os_printf("data: %s\n", data);
                     os_printf("ssid: %s\n", getParamValue("ssid",dest));
-                    saveSSID(getParamValue("ssid",dest));
+                    //saveSSID(getParamValue("ssid",dest));
+
+                    struct softap_config *config = (struct softap_config *) zalloc(sizeof(struct softap_config)); // initialization
+                    wifi_softap_get_config(config); // Get soft-AP config first.
+                    sprintf(config->ssid, getParamValue("ssid",dest));
+                    sprintf(config->password, getParamValue("password",dest));
+                    config->authmode = AUTH_WPA_WPA2_PSK;
+                    config->ssid_len = 0; // or its actual SSID length
+                    config->max_connection = 4;
+                    wifi_softap_set_config(config); // Set ESP8266 soft-AP config
                     
                     
                     
@@ -503,9 +512,9 @@ void soft_ap_init(void)
 {
     wifi_set_opmode(SOFTAP_MODE);
     struct softap_config *config = (struct softap_config *) zalloc(sizeof(struct softap_config)); // initialization
-    wifi_softap_get_config(config); // Get soft-AP config first.
-    sprintf(config->ssid, SOFT_AP_SSID);
-    sprintf(config->password, SOFT_AP_PASSWORD);
+    // wifi_softap_get_config(config); // Get soft-AP config first.
+    // sprintf(config->ssid, SOFT_AP_SSID);
+    // sprintf(config->password, SOFT_AP_PASSWORD);
     config->authmode = AUTH_WPA_WPA2_PSK;
     config->ssid_len = 0; // or its actual SSID length
     config->max_connection = 4;
@@ -564,6 +573,9 @@ void user_init(void)
     wifi_softap_get_config(config); // Get soft-AP config first.
     os_printf("CURRENT_SSID:%s\n", config->ssid);
     os_printf("CURRENT_PWD:%s\n", config->password);
+    if(config->ssid=="DEMO_AP" && config->password=="demodemo"){
+        os_printf("RESET-BRAND-NEW\n");
+    }
     //mount_filesystem();
     //if(strlen(read_file("ssid.txt"))>3){
     if (strcmp(flash,signature)){
