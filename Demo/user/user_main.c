@@ -602,7 +602,7 @@ void user_init(void)
         // struct station_config *sconfig = (struct station_config *)zalloc(sizeof(struct station_config));
         // sprintf(sconfig->ssid, "Unknown"); //don't forget to set this if you use it
         // sprintf(sconfig->password, "daredevilme"); //don't forget to set this if you use it
-        wifi_station_set_config(sconfig);
+        //wifi_station_set_config(sconfig);
         xTaskCreate(&httpd_task, "http_server", 1024, NULL, 2, NULL);
         free(sconfig);
         wifi_station_connect();
