@@ -562,8 +562,8 @@ void user_init(void)
 
     struct softap_config *config = (struct softap_config *) zalloc(sizeof(struct softap_config)); // initialization
     wifi_softap_get_config(config); // Get soft-AP config first.
-    os_printf("CURRENT_SSID:%s\n", softap_config->ssid);
-    os_printf("CURRENT_PWD:%s\n", softap_config->password);
+    os_printf("CURRENT_SSID:%s\n", config->ssid);
+    os_printf("CURRENT_PWD:%s\n", config->password);
     //mount_filesystem();
     //if(strlen(read_file("ssid.txt"))>3){
     if (strcmp(flash,signature)){
