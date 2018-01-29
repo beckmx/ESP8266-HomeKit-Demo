@@ -573,7 +573,7 @@ void user_init(void)
     wifi_softap_get_config(config); // Get soft-AP config first.
     os_printf("CURRENT_SSID:%s\n", config->ssid);
     os_printf("CURRENT_PWD:%s\n", config->password);
-    if(strcmp(config->ssid, "DEMO_AP")==0){strcmp(config->password, "demodemo")==0){
+    if(strcmp(config->ssid, "DEMO_AP")==0 && strcmp(config->password, "demodemo")==0){
         os_printf("RESET-BRAND-NEW\n");
     }
     //mount_filesystem();
