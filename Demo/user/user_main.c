@@ -90,6 +90,7 @@
 xQueueHandle identifyQueue;
 extern spiffs workingFS;
 struct esp_spiffs_config config;
+char mac_address[6]; // note 6, not 5, there's one there for the null terminator
 
 struct  gpio {
     int aid;
@@ -444,8 +445,8 @@ void httpd_task(void *pvParameters)
                         os_printf("resetting data\n");
                         struct softap_config *config = (struct softap_config *) zalloc(sizeof(struct softap_config)); // initialization
                         wifi_softap_get_config(config); // Get soft-AP config first.
-                        sprintf(config->password, "Suitch-123");
-                        sprintf(config->ssid, "suitch");
+                        sprintf(config->password, "suitch");
+                        sprintf(config->ssid, "Suitch-"+mac_address);
                         
                         config->authmode = AUTH_WPA_WPA2_PSK;
                         config->ssid_len = 0; // or its actual SSID length
@@ -581,13 +582,13 @@ void user_init(void)
     
     uint8_t hwaddr[6];
     static char my_id[32];
-    char otherString[6]; // note 6, not 5, there's one there for the null terminator
+    
 
     wifi_get_macaddr(STATION_IF, (uint8_t*)hwaddr);
     snprintf(my_id, sizeof(my_id), "%02x%02x%02x%02x%02x%02x", MAC2STR(hwaddr));
-    strncpy(otherString, my_id, 5);
-    otherString[5] = '\0'; // place the null terminator
-    os_printf("CURRENT_MAC:%s\n", otherString);
+    strncpy(mac_address, my_id, 5);
+    mac_address[5] = '\0'; // place the null terminator
+    os_printf("CURRENT_MAC:%s\n", mac_address);
     //mount_filesystem();
     //if(strlen(read_file("ssid.txt"))>3){
     if(strcmp(config->ssid, "DEMO_AP")==0 && strcmp(config->password, "demodemo")==0){
