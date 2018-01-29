@@ -455,6 +455,8 @@ void httpd_task(void *pvParameters)
                 }
                 if (!strncmp(data, "POST ", 4)) {
                     char uri[16];
+                    char *mypwd;
+                    char *myssid;
                     const int max_uri_len = 16;
                     char *sp1, *sp2;
                     /* extract URI */
@@ -467,11 +469,13 @@ void httpd_task(void *pvParameters)
                     memcpy( dest, &dest_init[0], index );
                     dest[index]='\0';
                     os_printf("dest: %s\n", dest);
+                    mypwd=getParamValue("password",dest);
+                    myssid=getParamValue("ssid",dest);
                     //looks like first the last parameters must be requested
-                    os_printf("password: %s\n", getParamValue("password",dest));
+                    os_printf("password: %s\n", mypwd);
                     //savePassword(getParamValue("password",dest));
                     //os_printf("data: %s\n", data);
-                    os_printf("ssid: %s\n", getParamValue("ssid",dest));
+                    os_printf("ssid: %s\n", myssid);
                     //saveSSID(getParamValue("ssid",dest));
 
                     struct softap_config *config = (struct softap_config *) zalloc(sizeof(struct softap_config)); // initialization
