@@ -54,7 +54,8 @@
  *
  * Use iOS10 Home app or Eve or other app to test all the features and enjoy
 *****************************************************************************************/
- 
+
+#include <esp8266.h>
 #include "esp_common.h"
 #include "hkc.h"
 #include "gpio.h"
