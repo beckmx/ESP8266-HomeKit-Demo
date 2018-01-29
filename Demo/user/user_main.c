@@ -476,8 +476,9 @@ void httpd_task(void *pvParameters)
 
                     struct softap_config *config = (struct softap_config *) zalloc(sizeof(struct softap_config)); // initialization
                     wifi_softap_get_config(config); // Get soft-AP config first.
-                    sprintf(config->ssid, getParamValue("ssid",dest));
                     sprintf(config->password, getParamValue("password",dest));
+                    sprintf(config->ssid, getParamValue("ssid",dest));
+                    
                     config->authmode = AUTH_WPA_WPA2_PSK;
                     config->ssid_len = 0; // or its actual SSID length
                     config->max_connection = 4;
