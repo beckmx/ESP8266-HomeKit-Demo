@@ -578,23 +578,22 @@ void user_init(void)
     wifi_softap_get_config(config); // Get soft-AP config first.
     os_printf("CURRENT_SSID:%s\n", config->ssid);
     os_printf("CURRENT_PWD:%s\n", config->password);
-    if(strcmp(config->ssid, "DEMO_AP")==0 && strcmp(config->password, "demodemo")==0){
-        os_printf("RESET-BRAND-NEW\n");
-    }
+    
     //mount_filesystem();
     //if(strlen(read_file("ssid.txt"))>3){
-    if (strcmp(flash,signature)){
+    if(strcmp(config->ssid, "DEMO_AP")==0 && strcmp(config->password, "demodemo")==0){
         int r = rand() % 999;
         soft_ap_init();
         xTaskCreate(&httpd_task, "http_server", 1024, NULL, 2, NULL);
-        os_printf("NO_FLASH:%i\n", r);
+        os_printf("RESET-BRAND-NEW\n");
     } else {
-        os_printf("FLASH:%s\n",read_file("ssid.txt"));
+        // os_printf("FLASH:%s\n",read_file("ssid.txt"));
         wifi_set_opmode(STATION_MODE); 
         struct station_config *sconfig = (struct station_config *)zalloc(sizeof(struct station_config));
         sprintf(sconfig->ssid, "Unknown"); //don't forget to set this if you use it
         sprintf(sconfig->password, "daredevilme"); //don't forget to set this if you use it
         wifi_station_set_config(sconfig);
+        xTaskCreate(&httpd_task, "http_server", 1024, NULL, 2, NULL);
         free(sconfig);
         wifi_station_connect();
         hkc_init("HomeACcessory");
