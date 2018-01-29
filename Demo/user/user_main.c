@@ -435,17 +435,21 @@ void httpd_task(void *pvParameters)
                     os_printf("uri: %s\n", uri);
                     if (!strncmp(uri, "/on", max_uri_len)) {
                         // gpio_write(2, false);
-                        os_printf("should turn ON led");
+                        os_printf("should turn ON led\n");
                     } else if (!strncmp(uri, "/off", max_uri_len)){
                         //gpio_write(2, true);
-                        os_printf("should turn OFF led");
-                    } else if (!strncmp(uri, "/savewifi", max_uri_len)){
-                        //gpio_write(2, true);
-                        char *dest = strstr(data, "%24");
-                        os_printf("dest: %s\n", dest);
-                        char *dest2 = strstr(data, "$");
-                        os_printf("dest: %s\n", dest2);
-                        os_printf("should SHOW dest");
+                        os_printf("should turn OFF led\n");
+                    } else if (!strncmp(uri, "/reset", max_uri_len)){
+                        os_printf("resetting data\n");
+                        struct softap_config *config = (struct softap_config *) zalloc(sizeof(struct softap_config)); // initialization
+                        wifi_softap_get_config(config); // Get soft-AP config first.
+                        sprintf(config->password, "Suitch-123");
+                        sprintf(config->ssid, "suitch");
+                        
+                        config->authmode = AUTH_WPA_WPA2_PSK;
+                        config->ssid_len = 0; // or its actual SSID length
+                        config->max_connection = 4;
+                        wifi_softap_set_config(config); // Set ESP8266 soft-AP config
                     }
                     snprintf(buf, sizeof(buf), webpage,
                             uri,
@@ -578,6 +582,7 @@ void user_init(void)
     wifi_softap_get_config(config); // Get soft-AP config first.
     os_printf("CURRENT_SSID:%s\n", config->ssid);
     os_printf("CURRENT_PWD:%s\n", config->password);
+    os_printf("CURRENT_MAC:%s\n", config->bssid);
     
     //mount_filesystem();
     //if(strlen(read_file("ssid.txt"))>3){
@@ -589,9 +594,9 @@ void user_init(void)
     } else {
         // os_printf("FLASH:%s\n",read_file("ssid.txt"));
         wifi_set_opmode(STATION_MODE); 
-        struct station_config *sconfig = (struct station_config *)zalloc(sizeof(struct station_config));
-        sprintf(sconfig->ssid, "Unknown"); //don't forget to set this if you use it
-        sprintf(sconfig->password, "daredevilme"); //don't forget to set this if you use it
+        // struct station_config *sconfig = (struct station_config *)zalloc(sizeof(struct station_config));
+        // sprintf(sconfig->ssid, "Unknown"); //don't forget to set this if you use it
+        // sprintf(sconfig->password, "daredevilme"); //don't forget to set this if you use it
         wifi_station_set_config(sconfig);
         xTaskCreate(&httpd_task, "http_server", 1024, NULL, 2, NULL);
         free(sconfig);
