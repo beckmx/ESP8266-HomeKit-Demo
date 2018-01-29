@@ -585,7 +585,7 @@ void user_init(void)
     
     uint8_t hwaddr[6];
     static char my_id[32];
-    sdk_wifi_get_macaddr(STATION_IF, (uint8_t*)hwaddr));
+    sdk_wifi_get_macaddr(STATION_IF, (uint8_t*)hwaddr);
     os_printf("CURRENT_MAC:%s\n", hwaddr);
     //snprintf(my_id, sizeof(my_id), "%02x%02x%02x%02x%02x%02x", MAC2STR(hwaddr));
     
