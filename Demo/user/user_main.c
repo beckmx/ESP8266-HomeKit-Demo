@@ -90,7 +90,6 @@
 xQueueHandle identifyQueue;
 extern spiffs workingFS;
 struct esp_spiffs_config config;
-static char my_id[32];
 
 struct  gpio {
     int aid;
@@ -581,10 +580,14 @@ void user_init(void)
     os_printf("CURRENT_PWD:%s\n", config->password);
     
     uint8_t hwaddr[6];
-    
+    static char my_id[32];
+    char otherString[6]; // note 6, not 5, there's one there for the null terminator
+
     wifi_get_macaddr(STATION_IF, (uint8_t*)hwaddr);
     snprintf(my_id, sizeof(my_id), "%02x%02x%02x%02x%02x%02x", MAC2STR(hwaddr));
-    os_printf("CURRENT_MAC:%s%s\n", my_id[0],my_id[1]);
+    strncpy(otherString, my_id, 5);
+    otherString[5] = '\0'; // place the null terminator
+    os_printf("CURRENT_MAC:%s\n", otherString);
     //mount_filesystem();
     //if(strlen(read_file("ssid.txt"))>3){
     if(strcmp(config->ssid, "DEMO_AP")==0 && strcmp(config->password, "demodemo")==0){
