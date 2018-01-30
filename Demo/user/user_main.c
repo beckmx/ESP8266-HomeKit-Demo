@@ -588,7 +588,7 @@ void user_init(void)
     snprintf(my_id, sizeof(my_id), "%02x%02x%02x%02x%02x%02x", MAC2STR(hwaddr));
     strncpy(mac_address, my_id, 5);
     mac_address[5] = '\0'; // place the null terminator
-    os_printf("CURRENT_MAC:%s\n", mac_address);
+    os_printf("CURRENT_MAC:%s\n", "suitch-"+mac_address);
     //mount_filesystem();
     //if(strlen(read_file("ssid.txt"))>3){
     if(strcmp(config->ssid, "DEMO_AP")==0 && strcmp(config->password, "demodemo")==0){
