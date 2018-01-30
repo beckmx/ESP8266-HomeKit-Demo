@@ -585,11 +585,10 @@ void user_init(void)
     
 
     wifi_get_macaddr(STATION_IF, (uint8_t*)hwaddr);
-    snprintf(my_id, sizeof(my_id), "%02x%02x%02x%02x%02x%02x", MAC2STR(hwaddr));
+    snprintf(my_id, sizeof(my_id), "suitch-%02x%02x", MAC2STR(hwaddr));
     strncpy(mac_address, my_id, 5);
-    mac_address[5] = '\0'; // place the null terminator
-    char *str = stradd(mac_address, "suitch-");
-    os_printf("CURRENT_MAC:%s\n", str);
+   
+    os_printf("CURRENT_MAC:%s\n", my_id);
     //mount_filesystem();
     //if(strlen(read_file("ssid.txt"))>3){
     if(strcmp(config->ssid, "DEMO_AP")==0 && strcmp(config->password, "demodemo")==0){
