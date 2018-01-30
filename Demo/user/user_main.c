@@ -588,8 +588,7 @@ void user_init(void)
     snprintf(my_id, sizeof(my_id), "%02x%02x%02x%02x%02x%02x", MAC2STR(hwaddr));
     strncpy(mac_address, my_id, 5);
     mac_address[5] = '\0'; // place the null terminator
-    char* str = "suitch-";
-    snprintf(str, sizeof str, "%s%c", str, mac_address);
+    char *str = stradd(mac_address, "suitch-");
     os_printf("CURRENT_MAC:%s\n", str);
     //mount_filesystem();
     //if(strlen(read_file("ssid.txt"))>3){
