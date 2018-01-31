@@ -550,6 +550,19 @@ void soft_ap_init(void)
     wifi_softap_dhcps_start(); // enable soft-AP DHCP server
 }
 
+uint8_t rev_byte(uint8_t x) {
+    uint8_t y;
+    uint8_t m = 1;
+    while (m) {
+       y >>= 1;
+       if (m&x) {
+          y |= 0x80;
+       }
+       m <<=1;
+    }
+    return y;
+}
+
 
 
 /******************************************************************************
@@ -581,14 +594,14 @@ void user_init(void)
     os_printf("CURRENT_PWD:%s\n", config->password);
     
     uint8_t hwaddr[6];
-    
+    uint8_t hwaddr2[6];
     static char my_id[32];
     
 
     wifi_get_macaddr(STATION_IF, (uint8_t*)hwaddr);
 
-    hwaddr = ((hwaddr * 0x0802LU & 0x22110LU) | (hwaddr * 0x8020LU & 0x88440LU)) * 0x10101LU >> 16;
-    snprintf(my_id, sizeof(my_id), "suitch-%02x%02x", MAC2STR(hwaddr));
+    hwaddr2=rev_byte(hwaddr);
+    snprintf(my_id, sizeof(my_id), "suitch-%02x%02x", MAC2STR(hwaddr2));
     strncpy(mac_address, my_id, 5);
    
     os_printf("CURRENT_MAC:%s\n", my_id);
