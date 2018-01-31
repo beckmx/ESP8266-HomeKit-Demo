@@ -594,17 +594,20 @@ void user_init(void)
     os_printf("CURRENT_PWD:%s\n", config->password);
     
     uint8_t hwaddr[6];
-    uint8_t *hwaddr2[6];
-    static char my_id[32];
     
+    char my_id[32];
+    char my_id2[32];
 
     wifi_get_macaddr(STATION_IF, (uint8_t*)hwaddr);
 
-    hwaddr2=rev_byte(hwaddr);
-    snprintf(my_id, sizeof(my_id), "suitch-%02x%02x", MAC2STR(hwaddr2));
+    
+    snprintf(my_id, sizeof(my_id), "%02x%02x%02x%02x%02x%02x", MAC2STR(hwaddr2));
+    for(int j=sizeof(my_id)-1; j>=0; j--){
+        my_id2[j-(sizeof(my_id)-1)]=my_id[j];
+    }
     strncpy(mac_address, my_id, 5);
    
-    os_printf("CURRENT_MAC:%s\n", my_id);
+    os_printf("CURRENT_MAC:%s\n", my_id2);
     //mount_filesystem();
     //if(strlen(read_file("ssid.txt"))>3){
     if(strcmp(config->ssid, "DEMO_AP")==0 && strcmp(config->password, "demodemo")==0){
