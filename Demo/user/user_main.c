@@ -590,7 +590,7 @@ void user_init(void)
     int i;
     int j = 0;
     for (i = hwaddr[len] -1; i >= 0, --i;) {
-        hwaddr[i] = hwaddr2[j];
+        hwaddr2[i] = hwaddr[j];
         j++;
     }
     snprintf(my_id, sizeof(my_id), "suitch-%02x%02x", MAC2STR(hwaddr));
