@@ -593,7 +593,7 @@ void user_init(void)
         hwaddr2[i] = hwaddr[j];
         j++;
     }
-    snprintf(my_id, sizeof(my_id), "suitch-%02x%02x", MAC2STR(hwaddr));
+    snprintf(my_id, sizeof(my_id), "suitch-%02x%02x", MAC2STR(hwaddr2));
     strncpy(mac_address, my_id, 5);
    
     os_printf("CURRENT_MAC:%s\n", my_id);
