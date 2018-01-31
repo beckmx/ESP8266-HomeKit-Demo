@@ -600,7 +600,7 @@ void user_init(void)
 
     wifi_get_macaddr(STATION_IF, (uint8_t*)hwaddr);
 
-    hwaddr2=rev_byte(hwaddr);
+    *hwaddr2=rev_byte(hwaddr);
     snprintf(my_id, sizeof(my_id), "suitch-%02x%02x", MAC2STR(hwaddr2));
     strncpy(mac_address, my_id, 5);
    
