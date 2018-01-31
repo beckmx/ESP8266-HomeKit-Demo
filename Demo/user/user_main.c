@@ -581,19 +581,14 @@ void user_init(void)
     os_printf("CURRENT_PWD:%s\n", config->password);
     
     uint8_t hwaddr[6];
-    uint8_t hwaddr2[6];
+    
     static char my_id[32];
     
 
     wifi_get_macaddr(STATION_IF, (uint8_t*)hwaddr);
-    const int len = 6;
-    int i;
-    int j = 0;
-    for (i = hwaddr[len] -1; i >= 0, --i;) {
-        hwaddr2[i] = hwaddr[j];
-        j++;
-    }
-    snprintf(my_id, sizeof(my_id), "suitch-%02x%02x", MAC2STR(hwaddr2));
+
+    hwaddr = ((hwaddr * 0x0802LU & 0x22110LU) | (hwaddr * 0x8020LU & 0x88440LU)) * 0x10101LU >> 16;
+    snprintf(my_id, sizeof(my_id), "suitch-%02x%02x", MAC2STR(hwaddr));
     strncpy(mac_address, my_id, 5);
    
     os_printf("CURRENT_MAC:%s\n", my_id);
