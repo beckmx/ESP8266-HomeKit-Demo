@@ -550,7 +550,7 @@ void soft_ap_init(void)
     wifi_softap_dhcps_start(); // enable soft-AP DHCP server
 }
 
-uint8_t rev_byte(uint8_t x) {
+uint8_t rev_byte(uint8_t *x) {
     uint8_t y;
     uint8_t m = 1;
     while (m) {
