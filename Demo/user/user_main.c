@@ -581,6 +581,7 @@ void user_init(void)
     os_printf("CURRENT_PWD:%s\n", config->password);
     
     uint8_t hwaddr[6];
+    uint8_t hwaddr2[6];
     static char my_id[32];
     
 
@@ -589,7 +590,7 @@ void user_init(void)
     int i;
     int j = 0;
     for (i = hwaddr[len] -1; i >= 0, --i;) {
-        hwaddr[i] = hwaddr[j];
+        hwaddr[i] = hwaddr2[j];
         j++;
     }
     snprintf(my_id, sizeof(my_id), "suitch-%02x%02x", MAC2STR(hwaddr));
