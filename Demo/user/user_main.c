@@ -550,18 +550,6 @@ void soft_ap_init(void)
     wifi_softap_dhcps_start(); // enable soft-AP DHCP server
 }
 
-uint8_t rev_byte(uint8_t *x) {
-    uint8_t y;
-    uint8_t m = 1;
-    while (m) {
-       y >>= 1;
-       if (m&x) {
-          y |= 0x80;
-       }
-       m <<=1;
-    }
-    return y;
-}
 
 
 
@@ -601,8 +589,9 @@ void user_init(void)
     wifi_get_macaddr(STATION_IF, (uint8_t*)hwaddr);
 
     
-    snprintf(my_id, sizeof(my_id), "%02x%02x%02x%02x%02x%02x", MAC2STR(hwaddr2));
-    for(int j=sizeof(my_id)-1; j>=0; j--){
+    snprintf(my_id, sizeof(my_id), "%02x%02x%02x%02x%02x%02x", MAC2STR(hwaddr));
+    int j;
+    for(j=sizeof(my_id)-1; j>=0; j--){
         my_id2[j-(sizeof(my_id)-1)]=my_id[j];
     }
     strncpy(mac_address, my_id, 5);
