@@ -12,7 +12,7 @@ fi
 # Travis sets this due to "language: c", but it confuses autotools configure when cross-building
 unset CC
 
-git clone --recursive https://github.com/pfalcon/esp-open-sdk.git
+git clone --recursive https://github.com/beckmx/esp-open-sdk.git
 cd esp-open-sdk
 git reset --hard ${OPENSDK_COMMIT}
 git submodule update --init
@@ -22,7 +22,13 @@ sed -i "s/2.69/2.68/" lx106-hal/configure.ac
 
 # build the toolchain relative to the CROSS_ROOT directory
 sed -r -i 's%TOOLCHAIN ?=.*%TOOLCHAIN=${CROSS_ROOT}%' Makefile
-
+cd croostool-NG
+mkdir .build
+cd .build
+mkdir tarballs
+cd tarballs
+wget https://ftp.gnu.org/gnu/mpc/mpc-1.0.2.tar.gz
+cd ../../..
 # will dump log on failure
 echo "Building toolchain without live progress, as progress spinner fills up log..."
 if !( make toolchain STANDALONE=n 2>&1 > make.log ); then
