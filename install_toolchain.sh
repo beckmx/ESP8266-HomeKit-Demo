@@ -22,7 +22,7 @@ sed -i "s/2.69/2.68/" lx106-hal/configure.ac
 
 # build the toolchain relative to the CROSS_ROOT directory
 sed -r -i 's%TOOLCHAIN ?=.*%TOOLCHAIN=${CROSS_ROOT}%' Makefile
-cd croostool-NG
+cd crosstool-NG
 mkdir .build
 cd .build
 mkdir tarballs
