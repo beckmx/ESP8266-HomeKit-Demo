@@ -174,4 +174,4 @@ curl --upload-file ../../bin/eagle.irom0text.bin https://transfer.sh/esp-button-
 
 date
 ls -l ../../bin/eagle.[if]*
-echo ../../../esptool/esptool.py --baud 230400 -p /dev/cu.usbserial-AH02MF3H write_flash 0x00000 ../../bin/eagle.flash.bin 0x14000 ../../bin/eagle.irom0text.bin
+# echo ../../../esptool/esptool.py --baud 230400 -p /dev/cu.usbserial-AH02MF3H write_flash 0x00000 ../../bin/eagle.flash.bin 0x14000 ../../bin/eagle.irom0text.bin
