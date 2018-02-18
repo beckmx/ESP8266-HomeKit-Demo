@@ -590,11 +590,14 @@ void user_init(void)
 
     
     snprintf(my_id, sizeof(my_id), "%02x%02x%02x%02x%02x%02x", MAC2STR(hwaddr));
-    int j;
-    for(j=sizeof(my_id)-1; j>=0; j--){
-        my_id2[j-(sizeof(my_id)-1)]=my_id[j];
+    char * c;     /* or "const char" for a2 */
+
+    for (c = my_id; *c; ++c)
+    {
+    /* *c is the character */
+    os_printf("char:%c\n", c);
     }
-    strncpy(mac_address, my_id, 5);
+    //strncpy(mac_address, my_id, 5);
    
     os_printf("CURRENT_MAC:%s\n", my_id2);
     //mount_filesystem();
