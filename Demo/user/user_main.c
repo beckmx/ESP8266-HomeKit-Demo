@@ -590,16 +590,15 @@ void user_init(void)
 
     
     snprintf(my_id, sizeof(my_id), "%02x%02x%02x%02x%02x%02x", MAC2STR(hwaddr));
-    char * c;     /* or "const char" for a2 */
 
-    for (c = my_id; *c; ++c)
-    {
-    /* *c is the character */
-    os_printf("char:%c\n", c);
+    for(int i = 0; str[i] != '\0'; ++i) {
+        //str[i] = toupper(str[i]);
+        os_printf("char:%c\n", str[i]);
     }
-    //strncpy(mac_address, my_id, 5);
+
+    
    
-    os_printf("CURRENT_MAC:%s\n", my_id2);
+    os_printf("CURRENT_MAC:%s\n", my_id);
     //mount_filesystem();
     //if(strlen(read_file("ssid.txt"))>3){
     if(strcmp(config->ssid, "DEMO_AP")==0 && strcmp(config->password, "demodemo")==0){
