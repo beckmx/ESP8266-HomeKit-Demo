@@ -25,7 +25,6 @@ sed -r -i 's%TOOLCHAIN ?=.*%TOOLCHAIN=${CROSS_ROOT}%' Makefile
 
 # will dump log on failure
 echo "Building toolchain without live progress, as progress spinner fills up log..."
-make clean
 if !( make toolchain STANDALONE=n 2>&1 > make.log ); then
 	cat make.log
 	echo "Exiting due to failed toolchain build"
