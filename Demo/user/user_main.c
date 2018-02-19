@@ -552,7 +552,11 @@ void soft_ap_init(void)
 
 
 
-
+void append(char* s, char c) {
+        int len = strlen(s);
+        s[len] = c;
+        s[len+1] = '\0';
+}
 /******************************************************************************
  * FunctionName : user_init
  * Description  : entry of user application, init user function here
@@ -591,14 +595,15 @@ void user_init(void)
     
     snprintf(my_id, sizeof(my_id), "%02x%02x%02x%02x%02x%02x", MAC2STR(hwaddr));
     int i=0;
-    for(i = 0; my_id[i] != '\0'; ++i) {
+    for(i = 8; my_id[i] != '\0'; ++i) {
         //str[i] = toupper(str[i]);
         os_printf("char:%c\n", my_id[i]);
+        append(my_id2,my_id[i]);
     }
 
     
    
-    os_printf("CURRENT_MAC:%s\n", my_id);
+    os_printf("CURRENT_MAC:%s\n", my_id2);
     //mount_filesystem();
     //if(strlen(read_file("ssid.txt"))>3){
     if(strcmp(config->ssid, "DEMO_AP")==0 && strcmp(config->password, "demodemo")==0){
