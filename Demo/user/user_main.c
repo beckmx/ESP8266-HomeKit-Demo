@@ -597,7 +597,7 @@ void user_init(void)
     int i=0;
     for(i = 8; my_id[i] != '\0'; ++i) {
         //str[i] = toupper(str[i]);
-        //os_printf("char:%c\n", my_id[i]);
+        os_printf("char:%c\n", my_id[i]);
         //append(my_id2,my_id[i]);
         suitch_ssid[i]=my_id[i];
         suitch_ssid[i+1] = '\0';
