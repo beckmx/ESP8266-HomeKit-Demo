@@ -91,7 +91,7 @@ xQueueHandle identifyQueue;
 extern spiffs workingFS;
 struct esp_spiffs_config config;
 char mac_address[6]; // note 6, not 5, there's one there for the null terminator
-char suitch_ssid[8]="Suitch-v";
+char suitch_ssid[9]="Suitch-v1";
 
 struct  gpio {
     int aid;
