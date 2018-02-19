@@ -588,7 +588,7 @@ void user_init(void)
     uint8_t hwaddr[6];
     
     char my_id[32];
-    char my_id2[7]="Suicth-";
+    char my_id2[6]="Suicth-";
 
     wifi_get_macaddr(STATION_IF, (uint8_t*)hwaddr);
 
