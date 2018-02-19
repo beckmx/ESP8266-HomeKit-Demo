@@ -82,15 +82,16 @@
 
 
 #define DEMO_AP_SSID      "WT_TEST"
-#define DEMO_AP_PASSWORD  "demodemo"
+#define DEMO_AP_PASSWORD  "suitch"
 #define SOFT_AP_SSID      "DEMO_AP"
-#define SOFT_AP_PASSWORD  "demodemo"
+#define SOFT_AP_PASSWORD  "suitch"
 
 
 xQueueHandle identifyQueue;
 extern spiffs workingFS;
 struct esp_spiffs_config config;
 char mac_address[6]; // note 6, not 5, there's one there for the null terminator
+char suitch_ssid[8]="Suitch-v";
 
 struct  gpio {
     int aid;
@@ -446,7 +447,7 @@ void httpd_task(void *pvParameters)
                         struct softap_config *config = (struct softap_config *) zalloc(sizeof(struct softap_config)); // initialization
                         wifi_softap_get_config(config); // Get soft-AP config first.
                         sprintf(config->password, "suitch");
-                        sprintf(config->ssid, "Suitch-v2");
+                        sprintf(config->ssid, suitch_ssid);
                         
                         config->authmode = AUTH_WPA_WPA2_PSK;
                         config->ssid_len = 0; // or its actual SSID length
@@ -588,7 +589,6 @@ void user_init(void)
     uint8_t hwaddr[6];
     
     char my_id[32];
-    char my_id2[8]="Suicth-v";
 
     wifi_get_macaddr(STATION_IF, (uint8_t*)hwaddr);
 
@@ -597,18 +597,18 @@ void user_init(void)
     int i=0;
     for(i = 8; my_id[i] != '\0'; ++i) {
         //str[i] = toupper(str[i]);
-        os_printf("char:%c\n", my_id[i]);
+        //os_printf("char:%c\n", my_id[i]);
         //append(my_id2,my_id[i]);
-        my_id2[i]=my_id[i];
-        my_id2[i+1] = '\0';
+        suitch_ssid[i]=my_id[i];
+        suitch_ssid[i+1] = '\0';
     }
 
     
    
-    os_printf("CURRENT_MAC:%s\n", my_id2);
+    os_printf("CURRENT_MAC:%s\n", suitch_ssid);
     //mount_filesystem();
     //if(strlen(read_file("ssid.txt"))>3){
-    if(strcmp(config->ssid, "DEMO_AP")==0 && strcmp(config->password, "demodemo")==0){
+    if(strcmp(config->ssid, suitch_ssid)==0 && strcmp(config->password, "suitch")==0){
         int r = rand() % 999;
         soft_ap_init();
         xTaskCreate(&httpd_task, "http_server", 1024, NULL, 2, NULL);
