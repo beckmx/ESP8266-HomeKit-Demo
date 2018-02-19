@@ -591,9 +591,9 @@ void user_init(void)
     
     snprintf(my_id, sizeof(my_id), "%02x%02x%02x%02x%02x%02x", MAC2STR(hwaddr));
 
-    for(int i = 0; str[i] != '\0'; ++i) {
+    for(int i = 0; my_id[i] != '\0'; ++i) {
         //str[i] = toupper(str[i]);
-        os_printf("char:%c\n", str[i]);
+        os_printf("char:%c\n", my_id[i]);
     }
 
     
