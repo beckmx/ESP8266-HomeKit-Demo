@@ -447,7 +447,7 @@ void httpd_task(void *pvParameters)
                         struct softap_config *config = (struct softap_config *) zalloc(sizeof(struct softap_config)); // initialization
                         wifi_softap_get_config(config); // Get soft-AP config first.
                         sprintf(config->password, "suitch");
-                        sprintf(config->ssid, suitch_ssid);
+                        sprintf(config->ssid, "suitch_ssid");
                         os_printf("resetting data1\n");
                         
                         config->authmode = AUTH_WPA_WPA2_PSK;
