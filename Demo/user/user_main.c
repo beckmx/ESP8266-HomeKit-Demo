@@ -447,7 +447,7 @@ void httpd_task(void *pvParameters)
                         struct softap_config *config = (struct softap_config *) zalloc(sizeof(struct softap_config)); // initialization
                         wifi_softap_get_config(config); // Get soft-AP config first.
                         sprintf(config->password, "suitch");
-                        sprintf(config->ssid, "suitch_ssid");
+                        sprintf(config->ssid, suitch_ssid);
                         os_printf("resetting data1\n");
                         
                         config->authmode = AUTH_WPA_WPA2_PSK;
@@ -455,6 +455,8 @@ void httpd_task(void *pvParameters)
                         config->max_connection = 4;
                         os_printf("resetting data2\n");
                         wifi_softap_set_config(config); // Set ESP8266 soft-AP config
+                        free(config);
+                        wifi_station_connect();
                         os_printf("resetting data3\n");
                     }
                     snprintf(buf, sizeof(buf), webpage,
@@ -497,6 +499,8 @@ void httpd_task(void *pvParameters)
                     config->ssid_len = 0; // or its actual SSID length
                     config->max_connection = 4;
                     wifi_softap_set_config(config); // Set ESP8266 soft-AP config
+                    free(config);
+                    wifi_station_connect();
                     
                     
                     
