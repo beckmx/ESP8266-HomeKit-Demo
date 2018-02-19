@@ -588,7 +588,7 @@ void user_init(void)
     uint8_t hwaddr[6];
     
     char my_id[32];
-    char my_id2[6]="Suicth-";
+    char my_id2[8]="Suicth-v";
 
     wifi_get_macaddr(STATION_IF, (uint8_t*)hwaddr);
 
@@ -598,7 +598,9 @@ void user_init(void)
     for(i = 8; my_id[i] != '\0'; ++i) {
         //str[i] = toupper(str[i]);
         os_printf("char:%c\n", my_id[i]);
-        append(my_id2,my_id[i]);
+        //append(my_id2,my_id[i]);
+        my_id2[i]=my_id[i];
+        my_id2[i+1] = '\0';
     }
 
     
