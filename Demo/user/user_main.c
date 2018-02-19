@@ -443,16 +443,19 @@ void httpd_task(void *pvParameters)
                         //gpio_write(2, true);
                         os_printf("should turn OFF led\n");
                     } else if (!strncmp(uri, "/reset", max_uri_len)){
-                        os_printf("resetting data\n");
+                        os_printf("resetting data0\n");
                         struct softap_config *config = (struct softap_config *) zalloc(sizeof(struct softap_config)); // initialization
                         wifi_softap_get_config(config); // Get soft-AP config first.
                         sprintf(config->password, "suitch");
                         sprintf(config->ssid, suitch_ssid);
+                        os_printf("resetting data1\n");
                         
                         config->authmode = AUTH_WPA_WPA2_PSK;
                         config->ssid_len = 0; // or its actual SSID length
                         config->max_connection = 4;
+                        os_printf("resetting data2\n");
                         wifi_softap_set_config(config); // Set ESP8266 soft-AP config
+                        os_printf("resetting data3\n");
                     }
                     snprintf(buf, sizeof(buf), webpage,
                             uri,
