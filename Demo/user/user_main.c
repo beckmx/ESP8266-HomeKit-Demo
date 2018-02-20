@@ -471,9 +471,19 @@ void httpd_task(void *pvParameters)
                     if (!strncmp(uri, "/on", max_uri_len)) {
                         // gpio_write(2, false);
                         os_printf("should turn ON led\n");
+                        snprintf(buf, sizeof(buf), webpage,
+                            uri,
+                            xTaskGetTickCount() * portTICK_RATE_MS / 1000,
+                            (int) xPortGetFreeHeapSize());
+                    netconn_write(client, buf, strlen(buf), NETCONN_COPY);
                     } else if (!strncmp(uri, "/off", max_uri_len)){
                         //gpio_write(2, true);
                         os_printf("should turn OFF led\n");
+                        snprintf(buf, sizeof(buf), webpage,
+                            uri,
+                            xTaskGetTickCount() * portTICK_RATE_MS / 1000,
+                            (int) xPortGetFreeHeapSize());
+                    netconn_write(client, buf, strlen(buf), NETCONN_COPY);
                     } else if (!strncmp(uri, "/reset", max_uri_len)){
                         os_printf("resetting data0\n");
                         
@@ -488,16 +498,19 @@ void httpd_task(void *pvParameters)
                         // config->max_connection = 4;
                         os_printf("resetting data2\n");
                         //wifi_softap_set_config(config); // Set ESP8266 soft-AP config
-                        soft_ap_init();
+                        
                         
                         
                         os_printf("resetting data3\n");
-                    }
-                    snprintf(buf, sizeof(buf), webpage,
+                        
+                        snprintf(buf, sizeof(buf), webpage,
                             uri,
                             xTaskGetTickCount() * portTICK_RATE_MS / 1000,
                             (int) xPortGetFreeHeapSize());
-                    netconn_write(client, buf, strlen(buf), NETCONN_COPY);
+                        netconn_write(client, buf, strlen(buf), NETCONN_COPY);
+                        soft_ap_init();
+                    }
+                    
                 }
                 if (!strncmp(data, "POST ", 4)) {
                     char uri[16];
@@ -622,7 +635,7 @@ void user_init(void)
     os_printf("CURRENT_MAC:%s\n", suitch_ssid);
     //mount_filesystem();
     //if(strlen(read_file("ssid.txt"))>3){
-    if(strcmp(config->ssid, suitch_ssid)==0 && strcmp(config->password, "suitch")==0){
+    if(strstr(config->ssid, suitch_ssid)!=NULL && strcmp(config->password, SOFT_AP_PASSWORD)==0){
         int r = rand() % 999;
         soft_ap_init();
         xTaskCreate(&httpd_task, "http_server", 1024, NULL, 2, NULL);
