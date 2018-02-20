@@ -491,7 +491,7 @@ void httpd_task(void *pvParameters)
                             xTaskGetTickCount() * portTICK_RATE_MS / 1000,
                             (int) xPortGetFreeHeapSize());
                         netconn_write(client, buf, strlen(buf), NETCONN_COPY);
-                        soft_ap_init();
+                        system_restart();
                     }
                     
                 }
