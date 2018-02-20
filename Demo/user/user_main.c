@@ -485,23 +485,6 @@ void httpd_task(void *pvParameters)
                             (int) xPortGetFreeHeapSize());
                     netconn_write(client, buf, strlen(buf), NETCONN_COPY);
                     } else if (!strncmp(uri, "/reset", max_uri_len)){
-                        os_printf("resetting data0\n");
-                        
-                        // struct softap_config *config = (struct softap_config *) zalloc(sizeof(struct softap_config)); // initialization
-                        // wifi_softap_get_config(config); // Get soft-AP config first.
-                        // sprintf(config->password, "suitch");
-                        // sprintf(config->ssid, suitch_ssid);
-                        // os_printf("resetting data1\n");
-                        
-                        // config->authmode = AUTH_WPA_WPA2_PSK;
-                        // config->ssid_len = 0; // or its actual SSID length
-                        // config->max_connection = 4;
-                        os_printf("resetting data2\n");
-                        //wifi_softap_set_config(config); // Set ESP8266 soft-AP config
-                        
-                        
-                        
-                        os_printf("resetting data3\n");
                         
                         snprintf(buf, sizeof(buf), webpage,
                             uri,
@@ -532,15 +515,18 @@ void httpd_task(void *pvParameters)
                     myssid=getParamValue("ssid",dest);
                     //looks like first the last parameters must be requested
                     os_printf("password: %s\n", mypwd);
-                    //savePassword(getParamValue("password",dest));
-                    //os_printf("data: %s\n", data);
                     os_printf("ssid: %s\n", myssid);
-                    //saveSSID(getParamValue("ssid",dest));
-                    // *config = (struct softap_config *) zalloc(sizeof(struct softap_config)); // initialization
-                    // //struct softap_config *config = (struct softap_config *) zalloc(sizeof(struct softap_config)); // initialization
-                    // wifi_softap_get_config(config); // Get soft-AP config first.
-                    // sprintf(config->password, mypwd);
-                    // sprintf(config->ssid, myssid);
+
+                    struct softap_config *config = (struct softap_config *) zalloc(sizeof(struct softap_config)); // initialization
+                    wifi_softap_get_config(config); // Get soft-AP config first.
+                    sprintf(config->ssid, myssid);
+                    sprintf(config->password, mypwd);
+                    config->authmode = AUTH_WPA_WPA2_PSK;
+                    config->ssid_len = 0; // or its actual SSID length
+                    config->max_connection = 4;
+                    wifi_softap_set_config(config); // Set ESP8266 soft-AP config
+                    free(config);
+                    
                     
                     wifi_set_opmode(STATION_MODE); 
                     struct station_config *sconfig = (struct station_config *)zalloc(sizeof(struct station_config));
