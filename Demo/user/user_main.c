@@ -526,7 +526,7 @@ void httpd_task(void *pvParameters)
                     index = (int)(dest_end - dest_init);
                     char dest[40];
                     memcpy( dest, &dest_init[0], index-1 );
-                    dest[index]='\0';
+                    dest[index-1]='\0';
                     os_printf("dest: %s\n", dest);
                     mypwd=getParamValue("password",dest);
                     myssid=getParamValue("ssid",dest);
