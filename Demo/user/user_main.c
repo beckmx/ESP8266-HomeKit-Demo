@@ -92,6 +92,7 @@ extern spiffs workingFS;
 struct esp_spiffs_config config;
 char mac_address[6]; // note 6, not 5, there's one there for the null terminator
 char suitch_ssid[9]="Suitch-v1";
+struct softap_config *config = (struct softap_config *) zalloc(sizeof(struct softap_config)); // initialization
 
 struct  gpio {
     int aid;
@@ -444,7 +445,7 @@ void httpd_task(void *pvParameters)
                         os_printf("should turn OFF led\n");
                     } else if (!strncmp(uri, "/reset", max_uri_len)){
                         os_printf("resetting data0\n");
-                        struct softap_config *config = (struct softap_config *) zalloc(sizeof(struct softap_config)); // initialization
+                        //struct softap_config *config = (struct softap_config *) zalloc(sizeof(struct softap_config)); // initialization
                         wifi_softap_get_config(config); // Get soft-AP config first.
                         sprintf(config->password, "suitch");
                         sprintf(config->ssid, suitch_ssid);
@@ -454,9 +455,10 @@ void httpd_task(void *pvParameters)
                         config->ssid_len = 0; // or its actual SSID length
                         config->max_connection = 4;
                         os_printf("resetting data2\n");
-                        wifi_softap_set_config(config); // Set ESP8266 soft-AP config
-                        free(config);
-                        wifi_station_connect();
+                        //wifi_softap_set_config(config); // Set ESP8266 soft-AP config
+                        soft_ap_init();
+                        
+                        
                         os_printf("resetting data3\n");
                     }
                     snprintf(buf, sizeof(buf), webpage,
@@ -490,7 +492,7 @@ void httpd_task(void *pvParameters)
                     os_printf("ssid: %s\n", myssid);
                     //saveSSID(getParamValue("ssid",dest));
 
-                    struct softap_config *config = (struct softap_config *) zalloc(sizeof(struct softap_config)); // initialization
+                    //struct softap_config *config = (struct softap_config *) zalloc(sizeof(struct softap_config)); // initialization
                     wifi_softap_get_config(config); // Get soft-AP config first.
                     sprintf(config->password, mypwd);
                     sprintf(config->ssid, myssid);
@@ -499,7 +501,7 @@ void httpd_task(void *pvParameters)
                     config->ssid_len = 0; // or its actual SSID length
                     config->max_connection = 4;
                     wifi_softap_set_config(config); // Set ESP8266 soft-AP config
-                    free(config);
+                    //free(config);
                     wifi_station_connect();
                     
                     
@@ -530,7 +532,7 @@ void httpd_task(void *pvParameters)
 void soft_ap_init(void)
 {
     wifi_set_opmode(SOFTAP_MODE);
-    struct softap_config *config = (struct softap_config *) zalloc(sizeof(struct softap_config)); // initialization
+    //struct softap_config *config = (struct softap_config *) zalloc(sizeof(struct softap_config)); // initialization
     // wifi_softap_get_config(config); // Get soft-AP config first.
     // sprintf(config->ssid, SOFT_AP_SSID);
     // sprintf(config->password, SOFT_AP_PASSWORD);
@@ -588,7 +590,7 @@ void user_init(void)
 
     
 
-    struct softap_config *config = (struct softap_config *) zalloc(sizeof(struct softap_config)); // initialization
+    
     wifi_softap_get_config(config); // Get soft-AP config first.
     os_printf("CURRENT_SSID:%s\n", config->ssid);
     os_printf("CURRENT_PWD:%s\n", config->password);
