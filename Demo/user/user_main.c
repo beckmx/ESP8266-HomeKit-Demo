@@ -535,7 +535,6 @@ void httpd_task(void *pvParameters)
 void soft_ap_init(void)
 {
     wifi_set_opmode(SOFTAP_MODE);
-    *config = (struct softap_config *) zalloc(sizeof(struct softap_config)); // initialization
     struct softap_config *config = (struct softap_config *) zalloc(sizeof(struct softap_config)); // initialization
     wifi_softap_get_config(config); // Get soft-AP config first.
     sprintf(config->ssid, suitch_ssid);
