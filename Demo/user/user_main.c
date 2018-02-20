@@ -536,7 +536,7 @@ void httpd_task(void *pvParameters)
                     wifi_station_set_config(sconfig);
                     free(sconfig);
                     //wifi_station_connect();
-                    ESP.restart();
+                    system_restart();
                     
                     
                     
