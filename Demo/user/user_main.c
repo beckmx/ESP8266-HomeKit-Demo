@@ -89,7 +89,7 @@
 
 xQueueHandle identifyQueue;
 extern spiffs workingFS;
-struct esp_spiffs_config config;
+//struct esp_spiffs_config config;
 char mac_address[6]; // note 6, not 5, there's one there for the null terminator
 char suitch_ssid[9]="Suitch-v1";
 struct softap_config *config = (struct softap_config *) zalloc(sizeof(struct softap_config)); // initialization
@@ -263,36 +263,36 @@ static void example_write_file()
 
 
 
-void mount_filesystem()
-{
+// void mount_filesystem()
+// {
     
     
-        config.phys_size = FS3_FLASH_SIZE;
-        config.phys_addr = FS3_FLASH_ADDR;
-        config.phys_erase_block = SECTOR_SIZE;
-        config.log_block_size = LOG_BLOCK;
-        config.log_page_size = LOG_PAGE;
-        config.fd_buf_size = FD_BUF_SIZE * 2;
-        config.cache_buf_size = CACHE_BUF_SIZE;
+//         config.phys_size = FS3_FLASH_SIZE;
+//         config.phys_addr = FS3_FLASH_ADDR;
+//         config.phys_erase_block = SECTOR_SIZE;
+//         config.log_block_size = LOG_BLOCK;
+//         config.log_page_size = LOG_PAGE;
+//         config.fd_buf_size = FD_BUF_SIZE * 2;
+//         config.cache_buf_size = CACHE_BUF_SIZE;
     
-    if ( esp_spiffs_init(&config) != SPIFFS_OK) {
-        os_printf("Error mount SPIFFS\n");
-    }
+//     if ( esp_spiffs_init(&config) != SPIFFS_OK) {
+//         os_printf("Error mount SPIFFS\n");
+//     }
 
-    // while (1) {
-    //     vTaskDelay(2000 / portTICK_RATE_MS);
+//     // while (1) {
+//     //     vTaskDelay(2000 / portTICK_RATE_MS);
 
-    //     example_write_file();
+//     //     example_write_file();
 
-    //     // example_read_file_posix();
+//     //     // example_read_file_posix();
 
-    //     example_read_file_spiffs();
+//     //     example_read_file_spiffs();
 
         
 
-    //     os_printf("\n\n");
-    // }
-}
+//     //     os_printf("\n\n");
+//     // }
+// }
 
 void saveToFile(char *content, char *fileName){
     strcat(content,"$");
@@ -445,6 +445,7 @@ void httpd_task(void *pvParameters)
                         os_printf("should turn OFF led\n");
                     } else if (!strncmp(uri, "/reset", max_uri_len)){
                         os_printf("resetting data0\n");
+                        *config = (struct softap_config *) zalloc(sizeof(struct softap_config)); // initialization
                         //struct softap_config *config = (struct softap_config *) zalloc(sizeof(struct softap_config)); // initialization
                         wifi_softap_get_config(config); // Get soft-AP config first.
                         sprintf(config->password, "suitch");
@@ -491,7 +492,7 @@ void httpd_task(void *pvParameters)
                     //os_printf("data: %s\n", data);
                     os_printf("ssid: %s\n", myssid);
                     //saveSSID(getParamValue("ssid",dest));
-
+                    *config = (struct softap_config *) zalloc(sizeof(struct softap_config)); // initialization
                     //struct softap_config *config = (struct softap_config *) zalloc(sizeof(struct softap_config)); // initialization
                     wifi_softap_get_config(config); // Get soft-AP config first.
                     sprintf(config->password, mypwd);
@@ -532,6 +533,7 @@ void httpd_task(void *pvParameters)
 void soft_ap_init(void)
 {
     wifi_set_opmode(SOFTAP_MODE);
+    *config = (struct softap_config *) zalloc(sizeof(struct softap_config)); // initialization
     //struct softap_config *config = (struct softap_config *) zalloc(sizeof(struct softap_config)); // initialization
     // wifi_softap_get_config(config); // Get soft-AP config first.
     // sprintf(config->ssid, SOFT_AP_SSID);
