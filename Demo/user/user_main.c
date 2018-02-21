@@ -148,6 +148,27 @@ void led(int aid, int iid, cJSON *value, int mode)
     }
 }
 
+void bulbBrightness(int aid, int iid, cJSON *value, int mode)
+{
+    switch (mode) {
+        case 1: { //changed by gui
+            char *out; out=cJSON_Print(value);  os_printf("bulbBrightness %s\n",out);  free(out);  // Print to text, print it, release the string.
+            //if (value) GPIO_OUTPUT(GPIO_Pin_2, value->type);
+        }break;
+        case 0: { //init
+           os_printf("bulbBrightness %s\n","init");
+        }break;
+        case 2: { //update
+            //do nothing
+            os_printf("bulbBrightness %s\n","update");
+        }break;
+        default: {
+            //print an error?
+            os_printf("bulbBrightness %s\n","error");
+        }break;
+    }
+}
+
 
 
 void identify_task(void *arg)
@@ -212,7 +233,7 @@ void    hkc_user_init(char *accname)
     chas=addService(      sers,++iid,APPLE,LIGHTBULB_S);
     addCharacteristic(chas,aid,++iid,APPLE,NAME_C,"light",NULL);
     addCharacteristic(chas,aid,++iid,APPLE,POWER_STATE_C,"0",NULL);
-    addCharacteristic(chas,aid,++iid,APPLE, BRIGHTNESS_C,"0",NULL);
+    addCharacteristic(chas,aid,++iid,APPLE, BRIGHTNESS_C,"0",bulbBrightness);
 
     char *out;
     out=cJSON_Print(root);  os_printf("%s\n",out);  free(out);  // Print to text, print it, release the string.
@@ -262,37 +283,6 @@ static void example_write_file()
 
 
 
-
-// void mount_filesystem()
-// {
-    
-    
-//         config.phys_size = FS3_FLASH_SIZE;
-//         config.phys_addr = FS3_FLASH_ADDR;
-//         config.phys_erase_block = SECTOR_SIZE;
-//         config.log_block_size = LOG_BLOCK;
-//         config.log_page_size = LOG_PAGE;
-//         config.fd_buf_size = FD_BUF_SIZE * 2;
-//         config.cache_buf_size = CACHE_BUF_SIZE;
-    
-//     if ( esp_spiffs_init(&config) != SPIFFS_OK) {
-//         os_printf("Error mount SPIFFS\n");
-//     }
-
-//     // while (1) {
-//     //     vTaskDelay(2000 / portTICK_RATE_MS);
-
-//     //     example_write_file();
-
-//     //     // example_read_file_posix();
-
-//     //     example_read_file_spiffs();
-
-        
-
-//     //     os_printf("\n\n");
-//     // }
-// }
 
 void saveToFile(char *content, char *fileName){
     strcat(content,"$");
@@ -469,7 +459,7 @@ void httpd_task(void *pvParameters)
                     uri[len] = '\0';
                     os_printf("uri: %s\n", uri);
                     if (!strncmp(uri, "/on", max_uri_len)) {
-                        // gpio_write(2, false);
+                        gpio_write(2, false);
                         os_printf("should turn ON led\n");
                         snprintf(buf, sizeof(buf), webpage,
                             uri,
@@ -477,7 +467,7 @@ void httpd_task(void *pvParameters)
                             (int) xPortGetFreeHeapSize());
                     netconn_write(client, buf, strlen(buf), NETCONN_COPY);
                     } else if (!strncmp(uri, "/off", max_uri_len)){
-                        //gpio_write(2, true);
+                        gpio_write(2, true);
                         os_printf("should turn OFF led\n");
                         snprintf(buf, sizeof(buf), webpage,
                             uri,
