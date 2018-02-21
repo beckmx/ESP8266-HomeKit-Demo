@@ -459,7 +459,7 @@ void httpd_task(void *pvParameters)
                     uri[len] = '\0';
                     os_printf("uri: %s\n", uri);
                     if (!strncmp(uri, "/on", max_uri_len)) {
-                        gpio_write(2, false);
+                       GPIO_OUTPUT(GPIO_Pin_2,0); // and toggle
                         os_printf("should turn ON led\n");
                         snprintf(buf, sizeof(buf), webpage,
                             uri,
@@ -467,7 +467,7 @@ void httpd_task(void *pvParameters)
                             (int) xPortGetFreeHeapSize());
                     netconn_write(client, buf, strlen(buf), NETCONN_COPY);
                     } else if (!strncmp(uri, "/off", max_uri_len)){
-                        gpio_write(2, true);
+                        GPIO_OUTPUT(GPIO_Pin_2,1); // and toggle
                         os_printf("should turn OFF led\n");
                         snprintf(buf, sizeof(buf), webpage,
                             uri,
