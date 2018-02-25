@@ -612,8 +612,7 @@ void user_init(void)
     os_printf("CURRENT_MAC:%s\n", suitch_ssid);
     //mount_filesystem();
     //if(strlen(read_file("ssid.txt"))>3){
-    if(strstr(config->ssid, suitch_ssid)!=NULL && strcmp(config->password, SOFT_AP_PASSWORD)==0){
-        int r = rand() % 999;
+    if((strstr(config->ssid, suitch_ssid)!=NULL && strcmp(config->password, SOFT_AP_PASSWORD)==0) || strstr(config->ssid,"ESP_")!=NULL){
         soft_ap_init();
         xTaskCreate(&httpd_task, "http_server", 1024, NULL, 2, NULL);
         os_printf("RESET-BRAND-NEW\n");
