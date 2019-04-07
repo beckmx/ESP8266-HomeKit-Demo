@@ -198,7 +198,7 @@ void    hkc_user_init(char *accname)
 *******************************************************************************/
 void user_init(void)
 {   
-    os_printf("start of user_init @ %d\n",system_get_time()/1000);
+    os_printf("start of user_init at @ %d\n",system_get_time()/1000);
     
 //use this block only once to set your favorite access point or put your own selection routine
     wifi_set_opmode(STATION_MODE); 
